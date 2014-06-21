@@ -1,0 +1,15 @@
+advhealthoptions.regenMode=Regen Mode %1$s
+advhealthoptions.regenMode.peaceful=Peaceful
+advhealthoptions.regenMode.peaceful.desc=Very fast natural health regeneration
+advhealthoptions.regenMode.easy=Easy
+advhealthoptions.regenMode.easy.desc=Fast natural health regeneration
+advhealthoptions.regenMode.normal=Normal
+advhealthoptions.regenMode.normal.desc=Average natural health regeneration
+advhealthoptions.regenMode.hard=Hard
+advhealthoptions.regenMode.hard.desc=Slow natural health regeneration
+advhealthoptions.regenMode.hardcore=Hardcore
+advhealthoptions.regenMode.hardcore.desc=Very slow natural health regeneration
+advhealthoptions.regenMode.ultrahardcore=Ultra Hardcore
+advhealthoptions.regenMode.ultrahardcore.desc=No natural health regeneration
+advhealthoptions.regenMode.custom=Custom
+advhealthoptions.regenMode.custom.desc=Use regeneration settings from config file
