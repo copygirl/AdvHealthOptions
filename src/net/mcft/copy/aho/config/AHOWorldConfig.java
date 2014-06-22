@@ -4,10 +4,14 @@ import java.io.File;
 
 import net.mcft.copy.core.config.Config;
 import net.mcft.copy.core.config.setting.DoubleSetting;
+import net.mcft.copy.core.config.setting.EnumSetting;
 import net.mcft.copy.core.config.setting.IntegerSetting;
 import net.mcft.copy.core.config.setting.Setting;
 
 public class AHOWorldConfig extends Config {
+	
+	// General
+	public static final String generalPreset = "general.preset";
 	
 	// Regeneration
 	public static final String regenHealTime      = "regeneration.healTime";
@@ -23,7 +27,7 @@ public class AHOWorldConfig extends Config {
 	
 	// Respawn
 	public static final String respawnHealth = "respawn.health";
-	public static final String respawnFood = "respawn.food";
+	public static final String respawnFood   = "respawn.food";
 	public static final String respawnShield = "respawn.shield";
 	public static final String respawnHurtPenalty = "respawn.hurtPenalty";
 	
@@ -33,6 +37,13 @@ public class AHOWorldConfig extends Config {
 	public AHOWorldConfig(File file) {
 		super(file);
 		this.file = file;
+		
+		// General
+		
+		new EnumSetting(this, generalPreset, EnumPreset.NORMAL)
+			.setComment("Choose a preset you want to go with, or CUSTOM if you want to build your own.\n" +
+			            "WARNING: If you select anything other than CUSTOM, all settings will be overwritten!\n" +
+			            "Valid values are PEACEFUL, EASY, NORMAL, HARD, HARDCORE, ULTRAHARDCORE, CUSTOM.");
 		
 		// Regeneration
 		
@@ -78,15 +89,27 @@ public class AHOWorldConfig extends Config {
 		
 	}
 	
+	@Override
+	public void load() {
+		super.load();
+		// If the preset setting is set to anything other
+		// than CUSTOM, change all settings to the preset's.
+		EnumPreset preset = getEnum(AHOWorldConfig.generalPreset);
+		if (preset != EnumPreset.CUSTOM)
+			usePreset(preset);
+	}
+	
 	/** Loads settings from the config file or uses settings from the global config. */
-	public void load(AHOWorldConfig config) {
-		if (file.exists()) super.load();
+	public void load(AHOGlobalConfig config) {
+		if (!file.exists()) super.load();
 		else for (Setting setting : settings.values())
 			setting.setValue(config.get(setting.fullName).getValue()); 
 	}
 	
 	/** Changes the config settings to use the preset's values. */
 	public void usePreset(EnumPreset preset) {
+		
+		get(generalPreset).setValue(preset);
 		
 		get(regenHealTime).setValue(preset.regenHealTime);
 		get(regenHungerMinimum).setValue(preset.regenHungerMinimum);

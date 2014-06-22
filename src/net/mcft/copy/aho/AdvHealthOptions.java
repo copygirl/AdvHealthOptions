@@ -33,12 +33,6 @@ public class AdvHealthOptions {
 		globalConfig = new AHOGlobalConfig(event.getSuggestedConfigurationFile());
 		globalConfig.load();
 		
-		// If the preset setting is set to anything other
-		// than CUSTOM, change all settings to the preset's.
-		EnumPreset preset = globalConfig.getEnum(AHOGlobalConfig.preset);
-		if (preset != EnumPreset.CUSTOM)
-			globalConfig.usePreset(preset);
-		
 		proxy.init();
 		
 		globalConfig.save();
@@ -60,7 +54,10 @@ public class AdvHealthOptions {
 		if (preset != EnumPreset.CUSTOM) {
 			worldConfig.usePreset(preset);
 			worldConfig.save();
-		}
+		// Save the world config file if it's already created, in case the
+		// preset setting was changed or the mod updated with new settings.
+		} else if (worldConfigFile.exists())
+			worldConfig.save();
 		
 	}
 	

@@ -17,7 +17,7 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
 		EnumControl regenControl = AdvHealthOptions.globalConfig.getEnum(
-				AHOGlobalConfig.control);
+				AHOGlobalConfig.generalControl);
 		if ((regenControl == EnumControl.HIDDEN) ||
 		    !(event.gui instanceof GuiCreateWorld) ||
 		     (event.gui instanceof GuiCreateWorldCustom)) return;

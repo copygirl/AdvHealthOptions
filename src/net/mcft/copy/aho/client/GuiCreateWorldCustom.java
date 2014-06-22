@@ -2,6 +2,7 @@ package net.mcft.copy.aho.client;
 
 import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
+import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumControl;
 import net.mcft.copy.aho.config.EnumPreset;
 import net.minecraft.client.gui.GuiButton;
@@ -27,7 +28,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 	
 	public GuiCreateWorldCustom(GuiScreen gui) {
 		super(gui);
-		regenMode = AdvHealthOptions.globalConfig.getEnum(AHOGlobalConfig.preset);
+		regenMode = AdvHealthOptions.globalConfig.getEnum(AHOWorldConfig.generalPreset);
 	}
 	
 	private String getRegenButtonString() {
@@ -40,7 +41,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 		super.initGui();
 		((GuiButton)buttonList.get(2)).yPosition = 100;
 		buttonList.add(buttonRegenMode = new GuiButton(9, width / 2 - 75, 151, 150, 20, getRegenButtonString()));
-		EnumControl regenControl = AdvHealthOptions.globalConfig.getEnum(AHOGlobalConfig.control);
+		EnumControl regenControl = AdvHealthOptions.globalConfig.getEnum(AHOGlobalConfig.generalControl);
 		buttonRegenMode.enabled = (regenControl != EnumControl.LOCK);
 	}
 	
@@ -85,7 +86,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 			drawString(fontRendererObj, gameModeLine2, width / 2 - 100, 134, 0xFFA0A0A0);
 			
 			String regenModeDesc = ((regenMode == EnumPreset.CUSTOM)
-					? AdvHealthOptions.globalConfig.getString(AHOGlobalConfig.description)
+					? AdvHealthOptions.globalConfig.getString(AHOGlobalConfig.generalDescription)
 					: (AHOLocalization.REGEN_MODE + "." + regenMode.toString().toLowerCase() + ".desc"));
 			regenModeDesc = I18n.format(regenModeDesc);
 			drawString(fontRendererObj, regenModeDesc, width / 2 - 100, 172, 0xFFA0A0A0);
