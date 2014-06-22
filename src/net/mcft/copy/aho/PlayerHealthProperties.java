@@ -46,6 +46,11 @@ public class PlayerHealthProperties implements IExtendedEntityProperties {
 		// Reset the "food timer" to disable Vanilla natural regeneration.
 		resetFoodTimer(stats);
 		
+		// If the heal time is set to 0, disable all regeneration.
+		double regenHealTime = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.regenHealTime);
+		if (regenHealTime <= 0)
+			return;
+		
 		// If player was hurt, increase the penalty timer.
 		if (hurt) {
 			float damageTaken = (healthBefore - player.getHealth());
@@ -87,7 +92,6 @@ public class PlayerHealthProperties implements IExtendedEntityProperties {
 			   (regenHungerMaximum - regenHungerMinimum + 1.0))
 			: 1.0); // ALL the regeneration!
 		
-		double regenHealTime = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.regenHealTime);
 		if ((regenTimer += (penaltyFactor * foodFactor) / 20.0) > regenHealTime) {
 			player.heal(1);
 			double regenExhaustion = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.regenExhaustion);
