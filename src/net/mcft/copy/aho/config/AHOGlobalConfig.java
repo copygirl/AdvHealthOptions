@@ -36,19 +36,4 @@ public class AHOGlobalConfig extends AHOWorldConfig {
 		
 	}
 	
-	/** Changes the config settings to use the preset's values. */
-	public void set(EnumPreset preset) {
-		
-		get(regenHealTime).setValue(preset.regenHealTime);
-		get(regenHungerMinimum).setValue(preset.regenHungerMinimum);
-		get(regenHungerMaximum).setValue(preset.regenHungerMaximum);
-		get(regenExhaustion).setValue(preset.regenExhaustion);
-		
-		get(hurtPenaltyTime).setValue(preset.hurtTime);
-		get(hurtPenaltyTimeMaximum).setValue(preset.hurtTimeMaximum);
-		get(hurtPenaltyMaximum).setValue(preset.hurtMaximum);
-		get(hurtPenaltyBuffer).setValue(preset.hurtBuffer);
-		
-	}
-	
 }

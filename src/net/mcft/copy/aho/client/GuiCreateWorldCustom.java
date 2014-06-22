@@ -14,8 +14,10 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class GuiCreateWorldCustom extends GuiCreateWorld {
 	
+	public static EnumPreset preset = null;
+	
 	private GuiButton buttonRegenMode;
-	private EnumPreset regenMode;
+	private static EnumPreset regenMode;
 	
 	public GuiCreateWorldCustom(GuiScreen gui) {
 		super(gui);
@@ -38,15 +40,21 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 	
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		super.actionPerformed(button);
 		if (!button.enabled) return;
-		if (button.id == 3) {
-			boolean inMoreOptions = ReflectionHelper.getPrivateValue(GuiCreateWorld.class, this, "field_146344_y");
-			buttonRegenMode.visible = !inMoreOptions;
-		} else if (button.id == 9) {
-			regenMode = EnumPreset.values()[(regenMode.ordinal() + 1) % EnumPreset.values().length];
-			buttonRegenMode.displayString = getRegenButtonString();
+		switch (button.id) {
+			case 0:
+				preset = regenMode;
+				break;
+			case 3:
+				boolean inMoreOptions = ReflectionHelper.getPrivateValue(GuiCreateWorld.class, this, "field_146344_y");
+				buttonRegenMode.visible = !inMoreOptions;
+				break;
+			case 9:
+				regenMode = EnumPreset.values()[(regenMode.ordinal() + 1) % EnumPreset.values().length];
+				buttonRegenMode.displayString = getRegenButtonString();
+				break;
 		}
+		super.actionPerformed(button);
 	}
 	
 	@Override

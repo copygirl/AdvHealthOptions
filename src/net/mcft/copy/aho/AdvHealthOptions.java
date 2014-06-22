@@ -2,6 +2,7 @@ package net.mcft.copy.aho;
 
 import java.io.File;
 
+import net.mcft.copy.aho.client.GuiCreateWorldCustom;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumControl;
@@ -37,7 +38,7 @@ public class AdvHealthOptions {
 		// than CUSTOM, change all settings to the preset's.
 		EnumPreset preset = globalConfig.getEnum(AHOGlobalConfig.preset);
 		if (preset != EnumPreset.CUSTOM)
-			globalConfig.set(preset);
+			globalConfig.usePreset(preset);
 		
 		proxy.init();
 		
@@ -53,6 +54,14 @@ public class AdvHealthOptions {
 		
 		worldConfig = new AHOWorldConfig(worldConfigFile);
 		worldConfig.load(globalConfig);
+		
+		// If the world was just created using the
+		// create world screen, use the selected preset.
+		if (GuiCreateWorldCustom.preset != null) {
+			if (GuiCreateWorldCustom.preset != EnumPreset.CUSTOM)
+				worldConfig.usePreset(GuiCreateWorldCustom.preset);
+			GuiCreateWorldCustom.preset = null;
+		}
 		
 		// Only save world-specific config file if the global
 		// control setting allows it or the file already exists.
