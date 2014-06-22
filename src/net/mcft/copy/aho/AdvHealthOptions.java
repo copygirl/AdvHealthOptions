@@ -14,7 +14,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = AdvHealthOptions.MOD_ID, version = "${version}")
+@Mod(modid = AdvHealthOptions.MOD_ID, version = "${version}",
+     dependencies = "required-after:copycore")
 public class AdvHealthOptions {
 	
 	public static final String MOD_ID = "AdvHealthOptions";
