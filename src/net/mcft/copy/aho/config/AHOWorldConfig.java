@@ -21,6 +21,12 @@ public class AHOWorldConfig extends Config {
 	public static final String hurtPenaltyMaximum     = "hurtPenalty.maximum";
 	public static final String hurtPenaltyBuffer      = "hurtPenalty.buffer";
 	
+	// Respawn
+	public static final String respawnHealth = "respawn.health";
+	public static final String respawnFood = "respawn.food";
+	public static final String respawnShield = "respawn.shield";
+	public static final String respawnHurtPenalty = "respawn.hurtPenalty";
+	
 	
 	public final File file;
 	
@@ -30,13 +36,13 @@ public class AHOWorldConfig extends Config {
 		
 		// Regeneration
 		
-		new DoubleSetting(this, regenHealTime).setValidRange(0.0, Double.MAX_VALUE)
+		new DoubleSetting(this, regenHealTime, EnumPreset.NORMAL.regenHealTime).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Minimum time in seconds between healing half a heart. Use 0 to disable.");
-		new IntegerSetting(this, regenHungerMinimum).setValidRange(0, 20)
+		new IntegerSetting(this, regenHungerMinimum, EnumPreset.NORMAL.regenHungerMinimum).setValidRange(0, 20)
 			.setComment("Natural regeneration starts at this hunger level. Valid values: 0 - 20.");
-		new IntegerSetting(this, regenHungerMaximum).setValidRange(0, 20)
+		new IntegerSetting(this, regenHungerMaximum, EnumPreset.NORMAL.regenHungerMaximum).setValidRange(0, 20)
 			.setComment("Natural regeneration is at its maximum at this hunger level. Valid values: 0 - 20.");
-		new DoubleSetting(this, regenExhaustion).setValidRange(0.0, Double.MAX_VALUE)
+		new DoubleSetting(this, regenExhaustion, EnumPreset.NORMAL.regenExhaustion).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Exhaustion added when healing naturally (higher = more food needed).");
 		
 		
@@ -46,16 +52,29 @@ public class AHOWorldConfig extends Config {
 				"During this time, health regeneration is decreased or completely inactive.");
 		
 		
-		new DoubleSetting(this, hurtPenaltyTime).setValidRange(0.0, Double.MAX_VALUE)
+		new DoubleSetting(this, hurtPenaltyTime, EnumPreset.NORMAL.hurtTime).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Penalty time in seconds added per point of damage (= half a heart).\n" +
 			            "When no damage is taken from a hit, half of this value is added instead.");
-		new DoubleSetting(this, hurtPenaltyTimeMaximum).setValidRange(0.0, Double.MAX_VALUE)
+		new DoubleSetting(this, hurtPenaltyTimeMaximum, EnumPreset.NORMAL.hurtTimeMaximum).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Maximum penalty time added at once when taking damage.");
-		new DoubleSetting(this, hurtPenaltyMaximum).setValidRange(0.0, Double.MAX_VALUE)
+		new DoubleSetting(this, hurtPenaltyMaximum, EnumPreset.NORMAL.hurtMaximum).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Maximum penalty time that can be accumulated.");
-		new DoubleSetting(this, hurtPenaltyBuffer).setValidRange(0.0, Double.MAX_VALUE)
+		new DoubleSetting(this, hurtPenaltyBuffer, EnumPreset.NORMAL.hurtBuffer).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Penalty time where regeneration speed decreases linearly.\n" +
 			            "When the penalty time is larger than this amount, regeneration is inactive.");
+		
+		// Respawn
+		
+		new IntegerSetting(this, respawnHealth, EnumPreset.NORMAL.respawnHealth).setValidRange(1, 20)
+			.setComment("Health players respawn with after death. Valid values: 1 - 20.");
+		new IntegerSetting(this, respawnFood, EnumPreset.NORMAL.respawnFood).setValidRange(0, 20)
+			.setComment("Food players respawn with after death. Valid values: 0 - 20.");
+		new IntegerSetting(this, respawnShield, EnumPreset.NORMAL.respawnShield).setValidRange(0, 40)
+			.setComment("Absorption points players respawn with after death.\n" +
+			            "The shield remains until it's used up. Valid values: 0 - 40.");
+		new DoubleSetting(this, respawnHurtPenalty, EnumPreset.NORMAL.respawnPenalty).setValidRange(0, Double.MAX_VALUE)
+			.setComment("Penalty time players respawn with after death.\n" +
+			            "Can be larger than the maximum hurt penalty time.");
 		
 	}
 	
@@ -78,6 +97,11 @@ public class AHOWorldConfig extends Config {
 		get(hurtPenaltyTimeMaximum).setValue(preset.hurtTimeMaximum);
 		get(hurtPenaltyMaximum).setValue(preset.hurtMaximum);
 		get(hurtPenaltyBuffer).setValue(preset.hurtBuffer);
+		
+		get(respawnHealth).setValue(preset.respawnHealth);
+		get(respawnFood).setValue(preset.respawnFood);
+		get(respawnHurtPenalty).setValue(preset.respawnPenalty);
+		get(respawnShield).setValue(preset.respawnShield);
 		
 	}
 	

@@ -60,7 +60,8 @@ public class PlayerHealthProperties implements IExtendedEntityProperties {
 				double penaltyIncrease = Math.min(hurtTimeMaximum, Math.max(0.5, damageTaken) * hurtTime);
 				
 				double hurtMaximum = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.hurtPenaltyMaximum);
-				penaltyTimer = Math.min(hurtMaximum, penaltyTimer + penaltyIncrease);
+				if (penaltyTimer < hurtMaximum)
+					penaltyTimer = Math.min(hurtMaximum, penaltyTimer + penaltyIncrease);
 			}
 			hurt = false;
 		}
