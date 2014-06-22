@@ -53,8 +53,10 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 					preset = regenMode;
 				break;
 			case 3:
+				// If going to the more options screen, hide the button.
+				// If going back to the main screen, show the button again.
 				boolean inMoreOptions = ReflectionHelper.getPrivateValue(GuiCreateWorld.class, this, "field_146344_y");
-				buttonRegenMode.visible = !inMoreOptions;
+				buttonRegenMode.visible = inMoreOptions;
 				break;
 			case 9:
 				regenMode = EnumPreset.values()[(regenMode.ordinal() + 1) % EnumPreset.values().length];
