@@ -1,7 +1,8 @@
-package net.mcft.copy.aho;
+package net.mcft.copy.aho.entity;
 
 import java.lang.reflect.Field;
 
+import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-public class PlayerHealthProperties implements IExtendedEntityProperties {
+public class AHOProperties implements IExtendedEntityProperties {
 	
 	public static final String IDENTIFIER = AdvHealthOptions.MOD_ID;
 	

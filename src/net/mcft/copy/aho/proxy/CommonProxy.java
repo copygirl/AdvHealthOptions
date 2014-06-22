@@ -1,8 +1,8 @@
 package net.mcft.copy.aho.proxy;
 
 import net.mcft.copy.aho.AdvHealthOptions;
-import net.mcft.copy.aho.PlayerHealthProperties;
 import net.mcft.copy.aho.config.AHOWorldConfig;
+import net.mcft.copy.aho.entity.AHOProperties;
 import net.mcft.copy.core.util.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +26,7 @@ public class CommonProxy {
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
 		if (event.entity instanceof EntityPlayerMP)
-			EntityUtils.createProperties(event.entity, PlayerHealthProperties.class);
+			EntityUtils.createProperties(event.entity, AHOProperties.class);
 	}
 	
 	@SubscribeEvent
@@ -56,8 +56,8 @@ public class CommonProxy {
 	}
 	
 	
-	private static PlayerHealthProperties getProperties(Entity entity) {
-		return EntityUtils.getProperties(entity, PlayerHealthProperties.class);
+	private static AHOProperties getProperties(Entity entity) {
+		return EntityUtils.getProperties(entity, AHOProperties.class);
 	}
 	
 }
