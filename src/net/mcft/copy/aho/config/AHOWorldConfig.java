@@ -31,13 +31,13 @@ public class AHOWorldConfig extends Config {
 		// Regeneration
 		
 		new DoubleSetting(this, regenHealTime).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Minimum time in seconds between healing half a heart. Set to 0 to disable.");
+			.setComment("Minimum time in seconds between healing half a heart. Use 0 to disable.");
 		new IntegerSetting(this, regenHungerMinimum).setValidRange(0, 20)
 			.setComment("Natural regeneration starts at this hunger level. Valid values: 0 - 20.");
 		new IntegerSetting(this, regenHungerMaximum).setValidRange(0, 20)
 			.setComment("Natural regeneration is at its maximum at this hunger level. Valid values: 0 - 20.");
 		new DoubleSetting(this, regenExhaustion).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Amount of exhaustion added when healing naturally.");
+			.setComment("Exhaustion added when healing naturally (higher = more food needed).");
 		
 		
 		// Hurt penalty
@@ -47,14 +47,14 @@ public class AHOWorldConfig extends Config {
 		
 		
 		new DoubleSetting(this, hurtPenaltyTime).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("The amount of penalty time in seconds added per point of damage (= half a heart).\n" +
+			.setComment("Penalty time in seconds added per point of damage (= half a heart).\n" +
 			            "When no damage is taken from a hit, half of this value is added instead.");
 		new DoubleSetting(this, hurtPenaltyTimeMaximum).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("The maximum amount of penalty time added at once when taking damage.");
+			.setComment("Maximum penalty time added at once when taking damage.");
 		new DoubleSetting(this, hurtPenaltyMaximum).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("The maximum amount of penalty time that can be accumulated.");
+			.setComment("Maximum penalty time that can be accumulated.");
 		new DoubleSetting(this, hurtPenaltyBuffer).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("The amount of penalty time where regeneration speed decreases linearly.\n" +
+			.setComment("Penalty time where regeneration speed decreases linearly.\n" +
 			            "When the penalty time is larger than this amount, regeneration is inactive.");
 		
 	}
