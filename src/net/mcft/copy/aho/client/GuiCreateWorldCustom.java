@@ -14,7 +14,13 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class GuiCreateWorldCustom extends GuiCreateWorld {
 	
-	public static EnumPreset preset = null;
+	private static EnumPreset preset = EnumPreset.CUSTOM;
+	
+	public static EnumPreset getAndResetPreset() {
+		EnumPreset p = preset;
+		preset = EnumPreset.CUSTOM;
+		return p;
+	}
 	
 	private GuiButton buttonRegenMode;
 	private static EnumPreset regenMode;
@@ -43,7 +49,8 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 		if (!button.enabled) return;
 		switch (button.id) {
 			case 0:
-				preset = regenMode;
+				if (buttonRegenMode.enabled)
+					preset = regenMode;
 				break;
 			case 3:
 				boolean inMoreOptions = ReflectionHelper.getPrivateValue(GuiCreateWorld.class, this, "field_146344_y");

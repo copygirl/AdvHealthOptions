@@ -5,7 +5,6 @@ import java.io.File;
 import net.mcft.copy.aho.client.GuiCreateWorldCustom;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
 import net.mcft.copy.aho.config.AHOWorldConfig;
-import net.mcft.copy.aho.config.EnumControl;
 import net.mcft.copy.aho.config.EnumPreset;
 import net.mcft.copy.aho.proxy.CommonProxy;
 import net.minecraftforge.common.DimensionManager;
@@ -57,19 +56,11 @@ public class AdvHealthOptions {
 		
 		// If the world was just created using the
 		// create world screen, use the selected preset.
-		if (GuiCreateWorldCustom.preset != null) {
-			if (GuiCreateWorldCustom.preset != EnumPreset.CUSTOM)
-				worldConfig.usePreset(GuiCreateWorldCustom.preset);
-			GuiCreateWorldCustom.preset = null;
-		}
-		
-		// Only save world-specific config file if the global
-		// control setting allows it or the file already exists.
-		// Don't save at all if this is a dedicated server.
-		EnumControl control = globalConfig.getEnum(AHOGlobalConfig.control);
-		if ((worldConfigFile.exists() || (control == EnumControl.DEFAULT)) &&
-		    !event.getServer().isDedicatedServer())
+		EnumPreset preset = GuiCreateWorldCustom.getAndResetPreset();
+		if (preset != EnumPreset.CUSTOM) {
+			worldConfig.usePreset(preset);
 			worldConfig.save();
+		}
 		
 	}
 	
