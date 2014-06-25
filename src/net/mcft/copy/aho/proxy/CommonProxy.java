@@ -9,12 +9,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class CommonProxy {
 	
@@ -30,9 +31,9 @@ public class CommonProxy {
 	}
 	
 	@SubscribeEvent
-	public void onLivingUpdate(LivingUpdateEvent event) {
-		if (event.entity instanceof EntityPlayerMP)
-			getProperties(event.entity).update((EntityPlayer)event.entity);
+	public void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
+		if (event.side.isClient() || (event.phase != Phase.END)) return;
+		getProperties(event.player).update(event.player);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
