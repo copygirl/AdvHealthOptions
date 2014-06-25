@@ -31,6 +31,12 @@ public class AHOWorldConfig extends Config {
 	public static final String respawnShield = "respawn.shield";
 	public static final String respawnHurtPenalty = "respawn.hurtPenalty";
 	
+	// Shield
+	public static final String shieldMaximum      = "shield.maximum";
+	public static final String shieldTimeout      = "shield.timeout";
+	public static final String shieldRechargeTime = "shield.rechargeTime";
+	public static final String shieldRequirement  = "shield.Requirement";
+	
 	// Miscellaneous
 	public static final String hunger = "misc.hunger";
 	
@@ -89,6 +95,19 @@ public class AHOWorldConfig extends Config {
 		new DoubleSetting(this, respawnHurtPenalty, EnumPreset.NORMAL.respawnPenalty).setValidRange(0, Double.MAX_VALUE)
 			.setComment("Penalty time players respawn with after death.\n" +
 			            "Can be larger than the maximum hurt penalty time.");
+		
+		// Shield
+		
+		new IntegerSetting(this, shieldMaximum).setValidRange(0, 40)
+			.setComment("Maximum absorption points that can be recharged. Valid values: 0 - 40.");
+		new DoubleSetting(this, shieldTimeout).setValidRange(0, Double.MAX_VALUE)
+			.setComment("Time for which the shield doesn't recharge after being hit.");
+		new DoubleSetting(this, shieldRechargeTime).setValidRange(0, Double.MAX_VALUE)
+			.setComment("Time it takes to recharge one absorption point.");
+		new EnumSetting(this, shieldRequirement, EnumShieldReq.NONE)
+			.setComment("NONE = Both shield and health can regenerate at the same time.\n" +
+			            "SHIELD_REQ_HEALTH = Full health is required for the shield to recharge.\n" +
+			            "HEALTH_REQ_SHIELD = Health regeneration is paused while shield is not full.");
 		
 		// Miscellaneous
 		

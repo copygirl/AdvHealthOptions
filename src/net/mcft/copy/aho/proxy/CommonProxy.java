@@ -32,7 +32,7 @@ public class CommonProxy {
 	
 	@SubscribeEvent
 	public void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
-		if (event.side.isClient() || (event.phase != Phase.END)) return;
+		if (event.side.isClient() || (event.phase != Phase.END) || event.player.isDead) return;
 		getProperties(event.player).update(event.player);
 	}
 	

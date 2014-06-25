@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumHunger;
+import net.mcft.copy.aho.config.EnumShieldReq;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,13 +25,15 @@ public class AHOProperties implements IExtendedEntityProperties {
 	
 	public static final String TAG_REGEN_TIMER = "regenTimer";
 	public static final String TAG_PENALTY_TIMER = "penaltyTimer";
+	public static final String TAG_SHIELD_TIMER = "shieldTimer";
 	
 	
 	public double regenTimer = 0;
 	public double penaltyTimer = 0;
+	public double shieldTimer = 0;
 	
-	public boolean hurt = false;
-	public float healthBefore = 0;
+	private boolean hurt = false;
+	private float healthBefore = 0;
 	
 	@Override
 	public void init(Entity entity, World world) {  }
@@ -39,26 +42,31 @@ public class AHOProperties implements IExtendedEntityProperties {
 	public void saveNBTData(NBTTagCompound compound) {
 		compound.setDouble(TAG_REGEN_TIMER, regenTimer);
 		compound.setDouble(TAG_PENALTY_TIMER, penaltyTimer);
+		compound.setDouble(TAG_SHIELD_TIMER, shieldTimer);
 	}
 	
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		regenTimer = compound.getDouble(TAG_REGEN_TIMER);
 		penaltyTimer = compound.getDouble(TAG_PENALTY_TIMER);
+		shieldTimer = compound.getDouble(TAG_SHIELD_TIMER);
 	}
 	
 	public void update(EntityPlayer player) {
 		
+		boolean wasHurt = hurt;
+		hurt = false;
+		
 		FoodStats foodStats = player.getFoodStats();
 		boolean hungerEnabled = handleHunger(player, foodStats);
+		boolean shieldPreventHeal = handleShield(player, wasHurt);
 		resetFoodTimer(foodStats);
 		
 		// If the heal time is set to 0, disable all regeneration.
 		double regenHealTime = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.regenHealTime);
-		if (regenHealTime <= 0)
-			return;
+		if ((regenHealTime <= 0) && !DEBUG) return;
 		
-		increasePenaltyTimer(player);
+		if (wasHurt) increasePenaltyTimer(player);
 		// Decrease penalty timer.
 		penaltyTimer = Math.max(0, penaltyTimer - 1 / 20.0);
 		
@@ -71,7 +79,8 @@ public class AHOProperties implements IExtendedEntityProperties {
 		double foodFactor = (hungerEnabled ? calculateFoodFactor(foodStats.getFoodLevel()) : 1.0);
 		double penaltyFactor = calculatePenaltyFactor(penaltyTimer);
 		
-		if ((regenTimer += (penaltyFactor * foodFactor) / 20.0) > regenHealTime) {
+		if (!shieldPreventHeal && (regenHealTime > 0) &&
+		    ((regenTimer += (penaltyFactor * foodFactor) / 20.0) > regenHealTime)) {
 			player.heal(1);
 			double regenExhaustion = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.regenExhaustion);
 			foodStats.addExhaustion((float)regenExhaustion);
@@ -79,10 +88,11 @@ public class AHOProperties implements IExtendedEntityProperties {
 		}
 		
 		if (DEBUG)
-			System.out.println(String.format("%s: Regen=%d/%d+%.2f Penalty=%d/%d/%d+%.2f",
+			System.out.println(String.format("%s: Regen=%d/%d+%.2f Penalty=%d/%d/%d+%.2f Shield=%d/%d",
 					player.getCommandSenderName(), (int)regenTimer, (int)regenHealTime, foodFactor,
 					(int)penaltyTimer, (int)AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.hurtPenaltyBuffer),
-					(int)AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.hurtPenaltyMaximum), penaltyFactor));
+					(int)AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.hurtPenaltyMaximum), penaltyFactor,
+					(int)shieldTimer, (int)AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.shieldRechargeTime)));
 		
 	}
 	
@@ -93,7 +103,7 @@ public class AHOProperties implements IExtendedEntityProperties {
 	}
 	
 	boolean foodLevelSet = false;
-	/** Handles the hunger settings DISABLE and HEALTH, returns if hunger is enabled. */
+	/** Handles the hunger setting, returns if hunger is enabled. */
 	private boolean handleHunger(EntityPlayer player, FoodStats foodStats) {
 		EnumHunger hunger = AdvHealthOptions.worldConfig.getEnum(AHOWorldConfig.hunger);
 		if (hunger == EnumHunger.ENABLE) return true;
@@ -113,6 +123,21 @@ public class AHOProperties implements IExtendedEntityProperties {
 		return false;
 	}
 	
+	/** Handles the shield settings, returns if healing is paused. */
+	private boolean handleShield(EntityPlayer player, boolean wasHurt) {
+		int maximum = AdvHealthOptions.worldConfig.getInteger(AHOWorldConfig.shieldMaximum);
+		EnumShieldReq req = AdvHealthOptions.worldConfig.getEnum(AHOWorldConfig.shieldRequirement);
+		boolean atMaximum = (player.getAbsorptionAmount() >= maximum);
+		if (!wasHurt && !atMaximum && !((req == EnumShieldReq.SHIELD_REQ_HEALTH) && player.shouldHeal())) {
+			double shieldRechargeTime = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.shieldRechargeTime);
+			if ((shieldTimer += 1 / 20.0) >= shieldRechargeTime) {
+				player.setAbsorptionAmount(Math.min(maximum, player.getAbsorptionAmount() + 1));
+				shieldTimer -= shieldTimer;
+			}
+		} else shieldTimer = -AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.shieldTimeout);
+		return ((req == EnumShieldReq.HEALTH_REQ_SHIELD) && !atMaximum);
+	}
+	
 	private static Field foodTimerField = null;
 	/** Reset the "food timer" to disable Vanilla natural regeneration. */
 	private void resetFoodTimer(FoodStats foodStats) {
@@ -126,11 +151,7 @@ public class AHOProperties implements IExtendedEntityProperties {
 	
 	/** Increases the "penalty timer" when player was hurt. */
 	private void increasePenaltyTimer(EntityPlayer player) {
-		if (!hurt) return;
-		hurt = false;
-		
 		float damageTaken = (healthBefore - player.getHealth());
-		if (damageTaken < 0) return;
 		
 		double hurtTime = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.hurtPenaltyTime);
 		double hurtTimeMaximum = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.hurtPenaltyTimeMaximum);
