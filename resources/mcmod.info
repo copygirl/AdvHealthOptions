@@ -1,14 +1,21 @@
-[{
-  "modid": "AdvHealthOptions",
-  "name": "Advanced Health Options",
-  "description": "",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authors": [ "copygirl" ],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [ ],
-  "dependencies": [ ]
-}]
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "AdvHealthOptions",
+    "name": "Advanced Health Options",
+    "description": "Provides extra health options that can be heavily customized.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/copygirl/AdvHealthOptions",
+    "updateUrl": "https://github.com/copygirl/AdvHealthOptions/releases",
+    "authorList": [ "copygirl" ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [ ],
+    "parent": "",
+    "requiredMods": [ "Forge", "copycore" ],
+    "dependencies": [ "copycore" ],
+    "dependants": [ ],
+    "useDependencyInformation": true
+  }]
+}
