@@ -113,7 +113,7 @@ public class AHOWorldConfig extends Config {
 	
 	/** Loads settings from the config file or uses settings from the global config. */
 	public void load(AHOGlobalConfig config) {
-		if (file.exists()) super.load();
+		if (file.exists()) this.load();
 		else for (Setting setting : settings.values())
 			setting.setValue(config.get(setting.fullName).getValue()); 
 	}
