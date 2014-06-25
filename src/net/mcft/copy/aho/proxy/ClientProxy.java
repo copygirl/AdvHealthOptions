@@ -3,10 +3,14 @@ package net.mcft.copy.aho.proxy;
 import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.client.GuiCreateWorldCustom;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
+import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumControl;
+import net.mcft.copy.aho.config.EnumHunger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,6 +30,14 @@ public class ClientProxy extends CommonProxy {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.displayGuiScreen(new GuiCreateWorldCustom(mc.currentScreen));
 		event.setCanceled(true);
+	}
+	
+	@SubscribeEvent
+	public void onRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
+		if (event.type != ElementType.FOOD) return;
+		EnumHunger hunger = AdvHealthOptions.worldConfig.getEnum(AHOWorldConfig.hunger);
+		if (hunger != EnumHunger.ENABLE)
+			event.setCanceled(true);
 	}
 	
 }

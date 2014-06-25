@@ -31,6 +31,9 @@ public class AHOWorldConfig extends Config {
 	public static final String respawnShield = "respawn.shield";
 	public static final String respawnHurtPenalty = "respawn.hurtPenalty";
 	
+	// Miscellaneous
+	public static final String hunger = "misc.hunger";
+	
 	
 	public final File file;
 	
@@ -86,6 +89,15 @@ public class AHOWorldConfig extends Config {
 		new DoubleSetting(this, respawnHurtPenalty, EnumPreset.NORMAL.respawnPenalty).setValidRange(0, Double.MAX_VALUE)
 			.setComment("Penalty time players respawn with after death.\n" +
 			            "Can be larger than the maximum hurt penalty time.");
+		
+		// Miscellaneous
+		
+		new EnumSetting(this, hunger, EnumHunger.ENABLE).setSynced()
+			.setComment("ENABLE  = Hunger functions like normal and affects regeneration speed.\n" +
+			            "DISABLE = Hunger is completely disabled, food can be eaten but is ignored.\n" +
+			            "HEALTH  = Hunger is disabled, eating food directly translates to health.\n" +
+			            "When hunger is disabled the food meter will internally be locked at 8, enough to sprint.\n" +
+			            "Changes in the food meter (for example from eating food) will directly affect health.");
 		
 	}
 	
