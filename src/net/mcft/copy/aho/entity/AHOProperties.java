@@ -116,8 +116,8 @@ public class AHOProperties implements IExtendedEntityProperties {
 		}
 		
 		// Reset the food level and saturation.
-		foodStats.setFoodLevel(8);
-		foodStats.addStats(0, 20.0F);
+		foodStats.setFoodLevel(0);
+		foodStats.addStats(8, 20.0F);
 		foodLevelSet = true;
 		
 		return false;
