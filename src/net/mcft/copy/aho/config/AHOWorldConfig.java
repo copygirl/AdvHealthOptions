@@ -115,8 +115,7 @@ public class AHOWorldConfig extends Config {
 			.setComment("ENABLE  = Hunger functions like normal and affects regeneration speed.\n" +
 			            "DISABLE = Hunger is completely disabled, food can be eaten but is ignored.\n" +
 			            "HEALTH  = Hunger is disabled, eating food directly translates to health.\n" +
-			            "When hunger is disabled the food meter will internally be locked at 8, enough to sprint.\n" +
-			            "Changes in the food meter (for example from eating food) will directly affect health.");
+			            "When hunger is disabled the food meter will internally be locked at 8, enough to sprint.");
 		
 	}
 	
