@@ -17,7 +17,7 @@ public class AHOWorldConfig extends Config {
 	public static final String regenHealTime      = "regeneration.healTime";
 	public static final String regenHungerMinimum = "regeneration.hungerMinimum";
 	public static final String regenHungerMaximum = "regeneration.hungerMaximum";
-	public static final String regenExhaustion    = "regeneration.Exhaustion";
+	public static final String regenExhaustion    = "regeneration.exhaustion";
 	
 	// Hurt penalty
 	public static final String hurtPenaltyTime        = "hurtPenalty.time";
@@ -35,7 +35,7 @@ public class AHOWorldConfig extends Config {
 	public static final String shieldMaximum      = "shield.maximum";
 	public static final String shieldTimeout      = "shield.timeout";
 	public static final String shieldRechargeTime = "shield.rechargeTime";
-	public static final String shieldRequirement  = "shield.Requirement";
+	public static final String shieldRequirement  = "shield.requirement";
 	
 	// Miscellaneous
 	public static final String hunger = "misc.hunger";
