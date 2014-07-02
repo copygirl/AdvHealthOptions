@@ -1,7 +1,5 @@
 package net.mcft.copy.aho.proxy;
 
-import net.mcft.copy.aho.AdvHealthOptions;
-import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.entity.AHOProperties;
 import net.mcft.copy.core.util.EntityUtils;
 import net.minecraft.entity.Entity;
@@ -36,24 +34,16 @@ public class CommonProxy {
 		getProperties(event.player).update(event.player);
 	}
 	
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onLivingHurt(LivingHurtEvent event) {
 		if (event.entity instanceof EntityPlayerMP)
-			getProperties(event.entity).hurt((EntityPlayer)event.entity);
+			event.ammount = (float)getProperties(event.entity).hurt((EntityPlayer)event.entity, event.ammount);
 	}
 	
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		int health = AdvHealthOptions.worldConfig.getInteger(AHOWorldConfig.respawnHealth);
-		int food   = AdvHealthOptions.worldConfig.getInteger(AHOWorldConfig.respawnFood);
-		int shield = AdvHealthOptions.worldConfig.getInteger(AHOWorldConfig.respawnShield);
-		double penalty = AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.respawnHurtPenalty);
-		
-		if (health < 20) event.player.setHealth(health);
-		if (food < 20) event.player.getFoodStats().setFoodLevel(food);
-		if (shield > 0) event.player.setAbsorptionAmount(shield);
-		if (penalty > 0)
-			getProperties(event.player).penaltyTimer = penalty;
+		if (event.player instanceof EntityPlayerMP)
+			getProperties(event.player).respawn(event.player);
 	}
 	
 	

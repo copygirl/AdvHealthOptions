@@ -3,6 +3,7 @@ package net.mcft.copy.aho.config;
 import java.io.File;
 
 import net.mcft.copy.core.config.Config;
+import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.EnumSetting;
 import net.mcft.copy.core.config.setting.IntegerSetting;
@@ -33,7 +34,9 @@ public class AHOWorldConfig extends Config {
 	public static final String respawnHurtPenalty = "respawn.hurtPenalty";
 	
 	// Shield
+	public static final String shieldMode         = "shield.mode";
 	public static final String shieldMaximum      = "shield.maximum";
+	public static final String shieldMaximumArmor = "shield.maximumArmor";
 	public static final String shieldTimeout      = "shield.timeout";
 	public static final String shieldRechargeTime = "shield.rechargeTime";
 	public static final String shieldRequirement  = "shield.requirement";
@@ -93,20 +96,25 @@ public class AHOWorldConfig extends Config {
 		new IntegerSetting(this, respawnFood, EnumPreset.NORMAL.respawnFood).setValidRange(0, 20)
 			.setComment("Food players respawn with after death. Valid values: 0 - 20.");
 		new IntegerSetting(this, respawnShield, EnumPreset.NORMAL.respawnShield).setValidRange(0, 40)
-			.setComment("Absorption points players respawn with after death.\n" +
+			.setComment("Shield points players respawn with after death.\n" +
 			            "The shield remains until it's used up. Valid values: 0 - 40.");
 		new DoubleSetting(this, respawnHurtPenalty, EnumPreset.NORMAL.respawnPenalty).setValidRange(0, Double.MAX_VALUE)
 			.setComment("Penalty time players respawn with after death.\n" +
 			            "Can be larger than the maximum hurt penalty time.");
 		
 		// Shield
-		
+
+		new EnumSetting(this, shieldMode, EnumShieldMode.ABSORPTION)
+			.setComment("ABSORPTION  = Uses vanilla absorption hearts, applied after armor.\n" +
+			            "SUBTRACTION = Decreases damage taken before armor calculation.");
 		new IntegerSetting(this, shieldMaximum).setValidRange(0, 40)
-			.setComment("Maximum absorption points that can be recharged. Valid values: 0 - 40.");
+			.setComment("Maximum shield points that can be recharged. Use 0 to disable. Valid values: 0 - 40.");
+		new BooleanSetting(this, shieldMaximumArmor)
+			.setComment("When enabled, total armor points affect the maximum shield capacity.");
 		new DoubleSetting(this, shieldTimeout).setValidRange(0, Double.MAX_VALUE)
 			.setComment("Time for which the shield doesn't recharge after being hit.");
 		new DoubleSetting(this, shieldRechargeTime).setValidRange(0, Double.MAX_VALUE)
-			.setComment("Time it takes to recharge one absorption point.");
+			.setComment("Time it takes to recharge one shield point.");
 		new EnumSetting(this, shieldRequirement, EnumShieldReq.NONE)
 			.setComment("NONE = Both shield and health can regenerate at the same time.\n" +
 			            "SHIELD_REQ_HEALTH = Full health is required for the shield to recharge.\n" +
@@ -128,8 +136,7 @@ public class AHOWorldConfig extends Config {
 		// If the preset setting is set to anything other
 		// than CUSTOM, change all settings to the preset's.
 		EnumPreset preset = getEnum(AHOWorldConfig.generalPreset);
-		if (preset != EnumPreset.CUSTOM)
-			usePreset(preset);
+		if (preset != EnumPreset.CUSTOM) usePreset(preset);
 	}
 	
 	/** Loads settings from the config file or uses settings from the global config. */
