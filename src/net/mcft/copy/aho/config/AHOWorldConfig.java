@@ -18,6 +18,7 @@ public class AHOWorldConfig extends Config {
 	public static final String regenHungerMinimum = "regeneration.hungerMinimum";
 	public static final String regenHungerMaximum = "regeneration.hungerMaximum";
 	public static final String regenExhaustion    = "regeneration.exhaustion";
+	public static final String regenHungerPoisonFactor = "regeneration.hungerPoisonFactor";
 	
 	// Hurt penalty
 	public static final String hurtPenaltyTime        = "hurtPenalty.time";
@@ -64,6 +65,8 @@ public class AHOWorldConfig extends Config {
 			.setComment("Natural regeneration is at its maximum at this hunger level. Valid values: 0 - 20.");
 		new DoubleSetting(this, regenExhaustion, EnumPreset.NORMAL.regenExhaustion).setValidRange(0.0, Double.MAX_VALUE)
 			.setComment("Exhaustion added when healing naturally (higher = more food needed).");
+		new DoubleSetting(this, regenHungerPoisonFactor, EnumPreset.NORMAL.regenHungerFactor).setValidRange(0.0, 1.0)
+			.setComment("Regeneration speed is multiplied by this if food poisoned (for example from rotten flesh).");
 		
 		
 		// Hurt penalty

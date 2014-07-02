@@ -9,6 +9,7 @@ import net.mcft.copy.aho.config.EnumShieldReq;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
@@ -77,6 +78,9 @@ public class AHOProperties implements IExtendedEntityProperties {
 		}
 		
 		double foodFactor = (hungerEnabled ? calculateFoodFactor(foodStats.getFoodLevel()) : 1.0);
+		// If player has the hunger potion effect (food poisoning?), apply hunger poison factor.
+		if (player.getActivePotionEffect(Potion.hunger) != null)
+			foodFactor *= AdvHealthOptions.worldConfig.getDouble(AHOWorldConfig.regenHungerPoisonFactor);
 		double penaltyFactor = calculatePenaltyFactor(penaltyTimer);
 		
 		if (!shieldPreventHeal && (regenHealTime > 0) &&
