@@ -2,6 +2,7 @@ package net.mcft.copy.aho.config;
 
 import java.io.File;
 
+import net.mcft.copy.core.copycore;
 import net.mcft.copy.core.config.Config;
 import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
@@ -48,7 +49,7 @@ public class AHOWorldConfig extends Config {
 	public final File file;
 	
 	public AHOWorldConfig(File file) {
-		super(file);
+		super(file, copycore.MOD_ID);
 		this.file = file;
 		
 		// General
