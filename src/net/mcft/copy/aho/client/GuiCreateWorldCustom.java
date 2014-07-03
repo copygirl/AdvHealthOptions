@@ -12,7 +12,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiCreateWorldCustom extends GuiCreateWorld {
 	
 	private static EnumPreset preset = EnumPreset.CUSTOM;

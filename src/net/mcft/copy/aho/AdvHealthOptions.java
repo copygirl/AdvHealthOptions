@@ -48,16 +48,18 @@ public class AdvHealthOptions {
 		worldConfig = new AHOWorldConfig(worldConfigFile);
 		worldConfig.load(globalConfig);
 		
-		// If the world was just created using the
-		// create world screen, use the selected preset.
-		EnumPreset preset = GuiCreateWorldCustom.getAndResetPreset();
-		if (preset != EnumPreset.CUSTOM) {
-			worldConfig.usePreset(preset);
-			worldConfig.save();
-		// Save the world config file if it's already created, in case the
-		// preset setting was changed or the mod updated with new settings.
-		} else if (worldConfigFile.exists())
-			worldConfig.save();
+		if (!event.getServer().isDedicatedServer()) {
+			// If the world was just created using the
+			// create world screen, use the selected preset.
+			EnumPreset preset = GuiCreateWorldCustom.getAndResetPreset();
+			if (preset != EnumPreset.CUSTOM) {
+				worldConfig.usePreset(preset);
+				worldConfig.save();
+			// Save the world config file if it's already created, in case the
+			// preset setting was changed or the mod updated with new settings.
+			} else if (worldConfigFile.exists())
+				worldConfig.save();
+		}
 		
 	}
 	
