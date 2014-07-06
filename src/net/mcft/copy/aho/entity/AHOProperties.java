@@ -7,59 +7,48 @@ import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumHunger;
 import net.mcft.copy.aho.config.EnumShieldMode;
 import net.mcft.copy.aho.config.EnumShieldReq;
-import net.minecraft.entity.Entity;
+import net.mcft.copy.core.entity.EntityPropertiesBase;
+import net.mcft.copy.core.entity.EntityProperty;
+import net.mcft.copy.core.entity.EntityPropertyPrimitive;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-public class AHOProperties implements IExtendedEntityProperties {
+public class AHOProperties extends EntityPropertiesBase {
 	
 	/** If enabled, prints debug messages about all players' regeneration progress. */
 	public static final boolean DEBUG = false;
 	
-	
 	public static final String IDENTIFIER = AdvHealthOptions.MOD_ID;
 	
-	public static final String TAG_SHIELD_AMOUNT = "shieldAmount";
-	public static final String TAG_REGEN_TIMER = "regenTimer";
-	public static final String TAG_PENALTY_TIMER = "penaltyTimer";
-	public static final String TAG_SHIELD_TIMER = "shieldTimer";
 	
-	
-	public double shieldAmount = 0;
-	public double regenTimer = 0;
-	public double penaltyTimer = 0;
-	public double shieldTimer = 0;
+	public final EntityProperty<Double> shieldAmount;
+	public final EntityProperty<Double> regenTimer;
+	public final EntityProperty<Double> penaltyTimer;
+	public final EntityProperty<Double> shieldTimer;
 	
 	private boolean hurt = false;
 	private float healthBefore = 0;
 	
-	@Override
-	public void init(Entity entity, World world) {  }
-	
-	@Override
-	public void saveNBTData(NBTTagCompound compound) {
-		compound.setDouble(TAG_SHIELD_AMOUNT, shieldAmount);
-		compound.setDouble(TAG_REGEN_TIMER, regenTimer);
-		compound.setDouble(TAG_PENALTY_TIMER, penaltyTimer);
-		compound.setDouble(TAG_SHIELD_TIMER, shieldTimer);
+	public AHOProperties() {
+		add(shieldAmount = new EntityPropertyPrimitive<Double>("shieldAmount", 0.0).setSaved().setSynced(false));
+		add(regenTimer = new EntityPropertyPrimitive<Double>("regenTimer", 0.0).setSaved());
+		add(penaltyTimer = new EntityPropertyPrimitive<Double>("penaltyTimer", 0.0).setSaved());
+		add(shieldTimer = new EntityPropertyPrimitive<Double>("shieldTimer", 0.0).setSaved());
 	}
 	
-	@Override
-	public void loadNBTData(NBTTagCompound compound) {
-		shieldAmount = compound.getDouble(TAG_SHIELD_AMOUNT);
-		regenTimer = compound.getDouble(TAG_REGEN_TIMER);
-		penaltyTimer = compound.getDouble(TAG_PENALTY_TIMER);
-		shieldTimer = compound.getDouble(TAG_SHIELD_TIMER);
-	}
+	// EntityPropertiesBase methods
 	
-	public void update(EntityPlayer player) {
+	@Override
+	public boolean isSynced() { return true; }
+	
+	@Override
+	public void update() {
+		super.update();
 		
+		EntityPlayer player = (EntityPlayer)getEntity();
 		boolean wasHurt = hurt;
 		hurt = false;
 		
@@ -74,11 +63,11 @@ public class AHOProperties implements IExtendedEntityProperties {
 		
 		if (wasHurt) increasePenaltyTimer(player);
 		// Decrease penalty timer.
-		penaltyTimer = Math.max(0, penaltyTimer - 1 / 20.0);
+		penaltyTimer.set(Math.max(0, penaltyTimer.get() - 1 / 20.0));
 		
 		// If player has full or no health, reset regeneration timer and return.
 		if (!player.shouldHeal()) {
-			regenTimer = 0;
+			regenTimer.set(0.0);
 			if (!DEBUG) return;
 		}
 		
@@ -86,24 +75,26 @@ public class AHOProperties implements IExtendedEntityProperties {
 		// If player has the hunger potion effect (food poisoning?), apply hunger poison factor.
 		if (player.getActivePotionEffect(Potion.hunger) != null)
 			foodFactor *= AdvHealthOptions.config.<Double>get(AHOWorldConfig.regenHungerPoisonFactor);
-		double penaltyFactor = calculatePenaltyFactor(penaltyTimer);
+		double penaltyFactor = calculatePenaltyFactor(penaltyTimer.get());
 		
 		if (!shieldPreventHeal && (regenHealTime > 0) &&
-		    ((regenTimer += (penaltyFactor * foodFactor) / 20.0) > regenHealTime)) {
+		    ((regenTimer.set(regenTimer.get() + (penaltyFactor * foodFactor) / 20.0)) > regenHealTime)) {
 			player.heal(1);
 			double regenExhaustion = AdvHealthOptions.config.get(AHOWorldConfig.regenExhaustion);
 			foodStats.addExhaustion((float)regenExhaustion);
-			regenTimer -= regenHealTime;
+			regenTimer.set(regenTimer.get() - regenHealTime);
 		}
 		
 		if (DEBUG)
 			System.out.println(String.format("%s: Regen=%d/%d+%.2f Penalty=%d/%d/%d+%.2f Shield=%d/%d",
-					player.getCommandSenderName(), (int)regenTimer, (int)regenHealTime, foodFactor,
-					(int)penaltyTimer, AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyBuffer).intValue(),
+					player.getCommandSenderName(), regenTimer.get().intValue(), (int)regenHealTime, foodFactor,
+					penaltyTimer.get().intValue(), AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyBuffer).intValue(),
 					AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyMaximum).intValue(), penaltyFactor,
-					(int)shieldTimer, AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldRechargeTime).intValue()));
+					shieldTimer.get().intValue(), AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldRechargeTime).intValue()));
 		
 	}
+	
+	// Utility methods
 	
 	/** Called when the player is hurt. */
 	public double hurt(EntityPlayer player, double damage) {
@@ -111,8 +102,8 @@ public class AHOProperties implements IExtendedEntityProperties {
 			healthBefore = player.getHealth();
 		hurt = true;
 		// Apply SUBTRACTION mode shielding.
-		double reduction = Math.min(damage, shieldAmount);
-		shieldAmount -= reduction;
+		double reduction = Math.min(damage, shieldAmount.get());
+		shieldAmount.set(shieldAmount.get() - reduction);
 		return (damage - reduction);
 	}
 	
@@ -129,7 +120,7 @@ public class AHOProperties implements IExtendedEntityProperties {
 			EnumShieldMode mode = AdvHealthOptions.config.get(AHOWorldConfig.shieldMode);
 			setShieldAmount(player, mode, shield);
 		}
-		if (penalty > 0) penaltyTimer = penalty;
+		if (penalty > 0) penaltyTimer.set(penalty);
 	}
 	
 	boolean foodLevelSet = false;
@@ -159,29 +150,29 @@ public class AHOProperties implements IExtendedEntityProperties {
 		double shieldAmount = getShieldAmount(player, mode);
 		
 		int maximum = AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximum);
-		if (AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximumArmor))
-			maximum = (maximum * player.getTotalArmorValue()) / 10;
+		//if (AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximumArmor))
+		//	maximum = (maximum * player.getTotalArmorValue()) / 10;
 		
 		EnumShieldReq req = AdvHealthOptions.config.get(AHOWorldConfig.shieldRequirement);
 		boolean atMaximum = (shieldAmount >= maximum);
 		
 		if (!wasHurt && !atMaximum && !((req == EnumShieldReq.SHIELD_REQ_HEALTH) && player.shouldHeal())) {
 			double shieldRechargeTime = AdvHealthOptions.config.get(AHOWorldConfig.shieldRechargeTime);
-			if ((shieldTimer += 1 / 20.0) >= shieldRechargeTime) {
+			if ((shieldTimer.set(shieldTimer.get() + 1 / 20.0)) >= shieldRechargeTime) {
 				setShieldAmount(player, mode, Math.min(maximum, shieldAmount + 1));
-				shieldTimer -= shieldTimer;
+				shieldTimer.set(shieldTimer.get() - shieldRechargeTime);
 			}
-		} else shieldTimer = -AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldTimeout);
+		} else shieldTimer.set(-AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldTimeout));
 		return ((req == EnumShieldReq.HEALTH_REQ_SHIELD) && !atMaximum);
 	}
 	
 	private double getShieldAmount(EntityPlayer player, EnumShieldMode mode) {
-		return ((mode == EnumShieldMode.ABSORPTION) ? player.getAbsorptionAmount() : shieldAmount);
+		return ((mode == EnumShieldMode.ABSORPTION) ? player.getAbsorptionAmount() : shieldAmount.get());
 	}
 	private void setShieldAmount(EntityPlayer player, EnumShieldMode mode, double amount) {
 		if (mode == EnumShieldMode.ABSORPTION)
 			player.setAbsorptionAmount((float)amount);
-		else shieldAmount = amount;
+		else shieldAmount.set(amount);
 	}
 	
 	private static Field foodTimerField = null;
@@ -204,8 +195,8 @@ public class AHOProperties implements IExtendedEntityProperties {
 		double penaltyIncrease = Math.min(hurtTimeMaximum, Math.max(0.5, damageTaken) * hurtTime);
 		
 		double hurtMaximum = AdvHealthOptions.config.get(AHOWorldConfig.hurtPenaltyMaximum);
-		if (penaltyTimer < hurtMaximum)
-			penaltyTimer = Math.min(hurtMaximum, penaltyTimer + penaltyIncrease);
+		if (penaltyTimer.get() < hurtMaximum)
+			penaltyTimer.set(Math.min(hurtMaximum, penaltyTimer.get() + penaltyIncrease));
 	}
 	 
 	private double calculateFoodFactor(int foodLevel) {

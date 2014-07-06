@@ -2,6 +2,7 @@ package net.mcft.copy.aho.proxy;
 
 import net.mcft.copy.aho.entity.AHOProperties;
 import net.mcft.copy.core.util.EntityUtils;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,14 +25,14 @@ public class CommonProxy {
 	
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayerMP)
+		if (event.entity instanceof EntityPlayer)
 			EntityUtils.createProperties(event.entity, AHOProperties.class);
 	}
 	
 	@SubscribeEvent
 	public void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
 		if (event.side.isClient() || (event.phase != Phase.END) || event.player.isDead) return;
-		getProperties(event.player).update(event.player);
+		getProperties(event.player).update();
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)
