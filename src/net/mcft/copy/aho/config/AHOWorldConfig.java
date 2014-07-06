@@ -80,17 +80,21 @@ public class AHOWorldConfig extends Config {
 	
 	// Shield
 	public static final Setting shieldMode =
-			new EnumSetting("shield.mode", EnumShieldMode.ABSORPTION).setComment(
-					"ABSORPTION  = Uses vanilla absorption hearts, applied after armor.\n" +
-					"SUBTRACTION = Decreases damage taken before armor calculation.");
+			new EnumSetting("shield.mode", EnumShieldMode.SUBTRACTION).setComment(
+					"SUBTRACTION = Decreases damage taken before armor calculation.\n" +
+					"ABSORPTION  = Uses vanilla absorption hearts, applied after armor.");
 	
+	@SyncedSetting
 	public static final Setting shieldMaximum =
 			new IntegerSetting("shield.maximum").setValidRange(0, 40).setComment(
 					"Maximum shield points that can be recharged. Use 0 to disable. Valid values: 0 - 40.");
 	
-	public static final Setting shieldMaximumArmor =
-			new BooleanSetting("shield.maximumArmor").setComment(
-					"When enabled, total armor points affect the maximum shield capacity.");
+	@SyncedSetting
+	public static final Setting shieldModifier =
+			new EnumSetting("shield.modifier", EnumShieldModifier.NONE).setComment(
+					"NONE   = Maximum shield is not affected by anything.\n" +
+					"ARMOR  = Maximum shield is affected by armor points.\n" +
+					"HEALTH = Maximum shield is affected by current health.");
 	
 	public static final Setting shieldTimeout =
 			new DoubleSetting("shield.timeout").setValidRange(0, Double.MAX_VALUE).setComment(
@@ -99,6 +103,7 @@ public class AHOWorldConfig extends Config {
 	public static final Setting shieldRechargeTime =
 			new DoubleSetting("shield.rechargeTime").setValidRange(0, Double.MAX_VALUE).setComment(
 					"Time it takes to recharge one shield point.");
+	
 	public static final Setting shieldRequirement =
 			new EnumSetting("shield.requirement", EnumShieldReq.NONE).setComment(
 					"NONE = Both shield and health can regenerate at the same time.\n" +
