@@ -2,8 +2,8 @@ package net.mcft.copy.aho.config;
 
 import java.io.File;
 
-import net.mcft.copy.core.copycore;
 import net.mcft.copy.core.config.Config;
+import net.mcft.copy.core.config.SyncedSetting;
 import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.EnumSetting;
@@ -13,122 +13,114 @@ import net.mcft.copy.core.config.setting.Setting;
 public class AHOWorldConfig extends Config {
 	
 	// General
-	public static final String generalPreset = "general.preset";
+	public static final Setting generalPreset =
+			new EnumSetting("general.preset", EnumPreset.NORMAL).setComment(
+					"Choose a preset you want to go with, or CUSTOM if you want to build your own.\n" +
+					"WARNING: If you select anything other than CUSTOM, all settings will be overwritten!\n" +
+					"Valid values are PEACEFUL, EASY, NORMAL, HARD, HARDCORE, ULTRAHARDCORE, CUSTOM.");
 	
 	// Regeneration
-	public static final String regenHealTime      = "regeneration.healTime";
-	public static final String regenHungerMinimum = "regeneration.hungerMinimum";
-	public static final String regenHungerMaximum = "regeneration.hungerMaximum";
-	public static final String regenExhaustion    = "regeneration.exhaustion";
-	public static final String regenHungerPoisonFactor = "regeneration.hungerPoisonFactor";
+	public static final Setting regenHealTime =
+			new DoubleSetting("regeneration.healTime", EnumPreset.NORMAL.regenHealTime).setValidRange(0.0, Double.MAX_VALUE).setComment(
+					"Minimum time in seconds between healing half a heart. Use 0 to disable.");
+	
+	public static final Setting regenHungerMinimum =
+			new IntegerSetting("regeneration.hungerMinimum", EnumPreset.NORMAL.regenHungerMinimum).setValidRange(0, 20).setComment(
+					"Natural regeneration starts at this hunger level. Valid values: 0 - 20.");
+	
+	public static final Setting regenHungerMaximum =
+		new IntegerSetting("regeneration.hungerMaximum", EnumPreset.NORMAL.regenHungerMaximum).setValidRange(0, 20).setComment(
+				"Natural regeneration is at its maximum at this hunger level. Valid values: 0 - 20.");
+	
+	public static final Setting regenExhaustion =
+			new DoubleSetting("regeneration.exhaustion", EnumPreset.NORMAL.regenExhaustion).setValidRange(0.0, Double.MAX_VALUE).setComment(
+					"Exhaustion added when healing naturally (higher = more food needed).");
+	
+	public static final Setting regenHungerPoisonFactor =
+			new DoubleSetting("regeneration.hungerPoisonFactor", EnumPreset.NORMAL.regenHungerFactor).setValidRange(0.0, 1.0).setComment(
+					"Regeneration speed is multiplied by this if food poisoned (for example from rotten flesh).");
 	
 	// Hurt penalty
-	public static final String hurtPenaltyTime        = "hurtPenalty.time";
-	public static final String hurtPenaltyTimeMaximum = "hurtPenalty.timeMaximum";
-	public static final String hurtPenaltyMaximum     = "hurtPenalty.maximum";
-	public static final String hurtPenaltyBuffer      = "hurtPenalty.buffer";
+	public static final Setting hurtPenaltyTime =
+			new DoubleSetting("hurtPenalty.time", EnumPreset.NORMAL.hurtTime).setValidRange(0.0, Double.MAX_VALUE).setComment(
+					"Penalty time in seconds added per point of damage (= half a heart).\n" +
+					"When no damage is taken from a hit, half of this value is added instead.");
+	
+	public static final Setting hurtPenaltyTimeMaximum =
+			new DoubleSetting("hurtPenalty.timeMaximum", EnumPreset.NORMAL.hurtTimeMaximum).setValidRange(0.0, Double.MAX_VALUE).setComment(
+					"Maximum penalty time added at once when taking damage.");
+	
+	public static final Setting hurtPenaltyMaximum =
+			new DoubleSetting("hurtPenalty.maximum", EnumPreset.NORMAL.hurtMaximum).setValidRange(0.0, Double.MAX_VALUE).setComment(
+					"Maximum penalty time that can be accumulated.");
+	
+	public static final Setting hurtPenaltyBuffer =
+			new DoubleSetting("hurtPenalty.buffer", EnumPreset.NORMAL.hurtBuffer).setValidRange(0.0, Double.MAX_VALUE).setComment(
+					"Penalty time where regeneration speed decreases linearly.\n" +
+					"When the penalty time is larger than this amount, regeneration is inactive.");
 	
 	// Respawn
-	public static final String respawnHealth = "respawn.health";
-	public static final String respawnFood   = "respawn.food";
-	public static final String respawnShield = "respawn.shield";
-	public static final String respawnHurtPenalty = "respawn.hurtPenalty";
+	public static final Setting respawnHealth =
+			new IntegerSetting("respawn.health", EnumPreset.NORMAL.respawnHealth).setValidRange(1, 20).setComment(
+					"Health players respawn with after death. Valid values: 1 - 20.");
+	
+	public static final Setting respawnFood =
+			new IntegerSetting("respawn.food", EnumPreset.NORMAL.respawnFood).setValidRange(0, 20).setComment(
+					"Food players respawn with after death. Valid values: 0 - 20.");
+	
+	public static final Setting respawnShield =
+			new IntegerSetting("respawn.shield", EnumPreset.NORMAL.respawnShield).setValidRange(0, 40).setComment(
+			"Shield points players respawn with after death.\n" +
+			"The shield remains until it's used up. Valid values: 0 - 40.");
+	
+	public static final Setting respawnHurtPenalty =
+			new DoubleSetting("respawn.hurtPenalty", EnumPreset.NORMAL.respawnPenalty).setValidRange(0, Double.MAX_VALUE).setComment(
+					"Penalty time players respawn with after death.\n" +
+					"Can be larger than the maximum hurt penalty time.");
 	
 	// Shield
-	public static final String shieldMode         = "shield.mode";
-	public static final String shieldMaximum      = "shield.maximum";
-	public static final String shieldMaximumArmor = "shield.maximumArmor";
-	public static final String shieldTimeout      = "shield.timeout";
-	public static final String shieldRechargeTime = "shield.rechargeTime";
-	public static final String shieldRequirement  = "shield.requirement";
+	public static final Setting shieldMode =
+			new EnumSetting("shield.mode", EnumShieldMode.ABSORPTION).setComment(
+					"ABSORPTION  = Uses vanilla absorption hearts, applied after armor.\n" +
+					"SUBTRACTION = Decreases damage taken before armor calculation.");
+	
+	public static final Setting shieldMaximum =
+			new IntegerSetting("shield.maximum").setValidRange(0, 40).setComment(
+					"Maximum shield points that can be recharged. Use 0 to disable. Valid values: 0 - 40.");
+	
+	public static final Setting shieldMaximumArmor =
+			new BooleanSetting("shield.maximumArmor").setComment(
+					"When enabled, total armor points affect the maximum shield capacity.");
+	
+	public static final Setting shieldTimeout =
+			new DoubleSetting("shield.timeout").setValidRange(0, Double.MAX_VALUE).setComment(
+					"Time for which the shield doesn't recharge after being hit.");
+	
+	public static final Setting shieldRechargeTime =
+			new DoubleSetting("shield.rechargeTime").setValidRange(0, Double.MAX_VALUE).setComment(
+					"Time it takes to recharge one shield point.");
+	public static final Setting shieldRequirement =
+			new EnumSetting("shield.requirement", EnumShieldReq.NONE).setComment(
+					"NONE = Both shield and health can regenerate at the same time.\n" +
+					"SHIELD_REQ_HEALTH = Full health is required for the shield to recharge.\n" +
+					"HEALTH_REQ_SHIELD = Health regeneration is paused while shield is not full.");
 	
 	// Miscellaneous
-	public static final String hunger = "misc.hunger";
+	@SyncedSetting
+	public static final Setting hunger =
+			new EnumSetting("misc.hunger", EnumHunger.ENABLE).setComment(
+					"ENABLE  = Hunger functions like normal and affects regeneration speed.\n" +
+					"DISABLE = Hunger is completely disabled, food can be eaten but is ignored.\n" +
+					"HEALTH  = Hunger is disabled, eating food directly translates to health.\n" +
+					"When hunger is disabled the food meter will internally be locked at 8, enough to sprint.");
 	
-	
-	public final File file;
 	
 	public AHOWorldConfig(File file) {
-		super(file, copycore.MOD_ID);
-		this.file = file;
-		
-		// General
-		
-		new EnumSetting(this, generalPreset, EnumPreset.NORMAL)
-			.setComment("Choose a preset you want to go with, or CUSTOM if you want to build your own.\n" +
-			            "WARNING: If you select anything other than CUSTOM, all settings will be overwritten!\n" +
-			            "Valid values are PEACEFUL, EASY, NORMAL, HARD, HARDCORE, ULTRAHARDCORE, CUSTOM.");
-		
-		// Regeneration
-		
-		new DoubleSetting(this, regenHealTime, EnumPreset.NORMAL.regenHealTime).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Minimum time in seconds between healing half a heart. Use 0 to disable.");
-		new IntegerSetting(this, regenHungerMinimum, EnumPreset.NORMAL.regenHungerMinimum).setValidRange(0, 20)
-			.setComment("Natural regeneration starts at this hunger level. Valid values: 0 - 20.");
-		new IntegerSetting(this, regenHungerMaximum, EnumPreset.NORMAL.regenHungerMaximum).setValidRange(0, 20)
-			.setComment("Natural regeneration is at its maximum at this hunger level. Valid values: 0 - 20.");
-		new DoubleSetting(this, regenExhaustion, EnumPreset.NORMAL.regenExhaustion).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Exhaustion added when healing naturally (higher = more food needed).");
-		new DoubleSetting(this, regenHungerPoisonFactor, EnumPreset.NORMAL.regenHungerFactor).setValidRange(0.0, 1.0)
-			.setComment("Regeneration speed is multiplied by this if food poisoned (for example from rotten flesh).");
-		
-		
-		// Hurt penalty
+		super(file);
+		addAllViaReflection();
 		addCategoryComment("hurtPenalty",
 				"When taking damage, a variable amount of 'penalty time' is added.\n" +
 				"During this time, health regeneration is decreased or completely inactive.");
-		
-		
-		new DoubleSetting(this, hurtPenaltyTime, EnumPreset.NORMAL.hurtTime).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Penalty time in seconds added per point of damage (= half a heart).\n" +
-			            "When no damage is taken from a hit, half of this value is added instead.");
-		new DoubleSetting(this, hurtPenaltyTimeMaximum, EnumPreset.NORMAL.hurtTimeMaximum).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Maximum penalty time added at once when taking damage.");
-		new DoubleSetting(this, hurtPenaltyMaximum, EnumPreset.NORMAL.hurtMaximum).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Maximum penalty time that can be accumulated.");
-		new DoubleSetting(this, hurtPenaltyBuffer, EnumPreset.NORMAL.hurtBuffer).setValidRange(0.0, Double.MAX_VALUE)
-			.setComment("Penalty time where regeneration speed decreases linearly.\n" +
-			            "When the penalty time is larger than this amount, regeneration is inactive.");
-		
-		// Respawn
-		
-		new IntegerSetting(this, respawnHealth, EnumPreset.NORMAL.respawnHealth).setValidRange(1, 20)
-			.setComment("Health players respawn with after death. Valid values: 1 - 20.");
-		new IntegerSetting(this, respawnFood, EnumPreset.NORMAL.respawnFood).setValidRange(0, 20)
-			.setComment("Food players respawn with after death. Valid values: 0 - 20.");
-		new IntegerSetting(this, respawnShield, EnumPreset.NORMAL.respawnShield).setValidRange(0, 40)
-			.setComment("Shield points players respawn with after death.\n" +
-			            "The shield remains until it's used up. Valid values: 0 - 40.");
-		new DoubleSetting(this, respawnHurtPenalty, EnumPreset.NORMAL.respawnPenalty).setValidRange(0, Double.MAX_VALUE)
-			.setComment("Penalty time players respawn with after death.\n" +
-			            "Can be larger than the maximum hurt penalty time.");
-		
-		// Shield
-
-		new EnumSetting(this, shieldMode, EnumShieldMode.ABSORPTION)
-			.setComment("ABSORPTION  = Uses vanilla absorption hearts, applied after armor.\n" +
-			            "SUBTRACTION = Decreases damage taken before armor calculation.");
-		new IntegerSetting(this, shieldMaximum).setValidRange(0, 40)
-			.setComment("Maximum shield points that can be recharged. Use 0 to disable. Valid values: 0 - 40.");
-		new BooleanSetting(this, shieldMaximumArmor)
-			.setComment("When enabled, total armor points affect the maximum shield capacity.");
-		new DoubleSetting(this, shieldTimeout).setValidRange(0, Double.MAX_VALUE)
-			.setComment("Time for which the shield doesn't recharge after being hit.");
-		new DoubleSetting(this, shieldRechargeTime).setValidRange(0, Double.MAX_VALUE)
-			.setComment("Time it takes to recharge one shield point.");
-		new EnumSetting(this, shieldRequirement, EnumShieldReq.NONE)
-			.setComment("NONE = Both shield and health can regenerate at the same time.\n" +
-			            "SHIELD_REQ_HEALTH = Full health is required for the shield to recharge.\n" +
-			            "HEALTH_REQ_SHIELD = Health regeneration is paused while shield is not full.");
-		
-		// Miscellaneous
-		
-		new EnumSetting(this, hunger, EnumHunger.ENABLE).setSynced()
-			.setComment("ENABLE  = Hunger functions like normal and affects regeneration speed.\n" +
-			            "DISABLE = Hunger is completely disabled, food can be eaten but is ignored.\n" +
-			            "HEALTH  = Hunger is disabled, eating food directly translates to health.\n" +
-			            "When hunger is disabled the food meter will internally be locked at 8, enough to sprint.");
-		
 	}
 	
 	@Override
@@ -136,36 +128,36 @@ public class AHOWorldConfig extends Config {
 		super.load();
 		// If the preset setting is set to anything other
 		// than CUSTOM, change all settings to the preset's.
-		EnumPreset preset = getEnum(AHOWorldConfig.generalPreset);
+		EnumPreset preset = get(AHOWorldConfig.generalPreset);
 		if (preset != EnumPreset.CUSTOM) usePreset(preset);
 	}
 	
 	/** Loads settings from the config file or uses settings from the global config. */
 	public void load(AHOGlobalConfig config) {
-		if (file.exists()) this.load();
-		else for (Setting setting : settings.values())
-			setting.setValue(config.get(setting.fullName).getValue()); 
+		if (exists()) this.load();
+		else for (Setting setting : getSettings())
+			set(setting, config.get(setting)); 
 	}
 	
 	/** Changes the config settings to use the preset's values. */
 	public void usePreset(EnumPreset preset) {
 		
-		get(generalPreset).setValue(preset);
+		set(generalPreset, preset);
 		
-		get(regenHealTime).setValue(preset.regenHealTime);
-		get(regenHungerMinimum).setValue(preset.regenHungerMinimum);
-		get(regenHungerMaximum).setValue(preset.regenHungerMaximum);
-		get(regenExhaustion).setValue(preset.regenExhaustion);
+		set(regenHealTime, preset.regenHealTime);
+		set(regenHungerMinimum, preset.regenHungerMinimum);
+		set(regenHungerMaximum, preset.regenHungerMaximum);
+		set(regenExhaustion, preset.regenExhaustion);
 		
-		get(hurtPenaltyTime).setValue(preset.hurtTime);
-		get(hurtPenaltyTimeMaximum).setValue(preset.hurtTimeMaximum);
-		get(hurtPenaltyMaximum).setValue(preset.hurtMaximum);
-		get(hurtPenaltyBuffer).setValue(preset.hurtBuffer);
+		set(hurtPenaltyTime, preset.hurtTime);
+		set(hurtPenaltyTimeMaximum, preset.hurtTimeMaximum);
+		set(hurtPenaltyMaximum, preset.hurtMaximum);
+		set(hurtPenaltyBuffer, preset.hurtBuffer);
 		
-		get(respawnHealth).setValue(preset.respawnHealth);
-		get(respawnFood).setValue(preset.respawnFood);
-		get(respawnHurtPenalty).setValue(preset.respawnPenalty);
-		get(respawnShield).setValue(preset.respawnShield);
+		set(respawnHealth, preset.respawnHealth);
+		set(respawnFood, preset.respawnFood);
+		set(respawnHurtPenalty, preset.respawnPenalty);
+		set(respawnShield, preset.respawnShield);
 		
 	}
 	

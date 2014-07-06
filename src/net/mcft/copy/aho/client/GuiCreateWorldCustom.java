@@ -31,7 +31,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 	
 	public GuiCreateWorldCustom(GuiScreen gui) {
 		super(gui);
-		regenMode = AdvHealthOptions.globalConfig.getEnum(AHOWorldConfig.generalPreset);
+		regenMode = AdvHealthOptions.config.get(AHOWorldConfig.generalPreset);
 	}
 	
 	private String getRegenButtonString() {
@@ -44,7 +44,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 		super.initGui();
 		((GuiButton)buttonList.get(2)).yPosition = 100;
 		buttonList.add(buttonRegenMode = new GuiButton(9, width / 2 - 75, 151, 150, 20, getRegenButtonString()));
-		EnumControl regenControl = AdvHealthOptions.globalConfig.getEnum(AHOGlobalConfig.generalControl);
+		EnumControl regenControl = AdvHealthOptions.config.get(AHOGlobalConfig.generalControl);
 		buttonRegenMode.enabled = (regenControl != EnumControl.LOCK);
 	}
 	
@@ -89,7 +89,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 			drawString(fontRendererObj, gameModeLine2, width / 2 - 100, 134, 0xFFA0A0A0);
 			
 			String regenModeDesc = ((regenMode == EnumPreset.CUSTOM)
-					? AdvHealthOptions.globalConfig.getString(AHOGlobalConfig.generalDescription)
+					? AdvHealthOptions.config.<String>get(AHOGlobalConfig.generalDescription)
 					: (AHOLocalization.REGEN_MODE + "." + regenMode.toString().toLowerCase() + ".desc"));
 			regenModeDesc = I18n.format(regenModeDesc);
 			drawString(fontRendererObj, regenModeDesc, width / 2 - 100, 172, 0xFFA0A0A0);

@@ -20,8 +20,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
-		EnumControl regenControl = AdvHealthOptions.globalConfig.getEnum(
-				AHOGlobalConfig.generalControl);
+		EnumControl regenControl = AdvHealthOptions.config.get(AHOGlobalConfig.generalControl);
 		if ((regenControl == EnumControl.HIDDEN) ||
 		    !(event.gui instanceof GuiCreateWorld) ||
 		     (event.gui instanceof GuiCreateWorldCustom)) return;
@@ -35,7 +34,7 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
 		if (event.type != ElementType.FOOD) return;
-		EnumHunger hunger = AdvHealthOptions.worldConfig.getEnum(AHOWorldConfig.hunger);
+		EnumHunger hunger = AdvHealthOptions.config.get(AHOWorldConfig.hunger);
 		if (hunger != EnumHunger.ENABLE)
 			event.setCanceled(true);
 	}
