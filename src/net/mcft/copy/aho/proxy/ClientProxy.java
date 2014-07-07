@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
@@ -47,43 +46,56 @@ public class ClientProxy extends CommonProxy {
 	
 	@SubscribeEvent
 	public void onRenderGameOverlayPre(RenderGameOverlayEvent.Pre event) {
-		if (event.type == ElementType.ALL) renderHealth = false;
-		else if (event.type != ElementType.FOOD) return;
-		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger);
-		if (hunger != EnumHunger.ENABLE)
-			event.setCanceled(true);
+		switch (event.type) {
+			case ALL:
+				renderHealth = false;
+				break;
+			case FOOD:
+				// Don't render food meter if hunger is disabled.
+				if (AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger) != EnumHunger.ENABLE)
+					event.setCanceled(true);
+				break;
+			default: break;
+		}
 	}
 	
 	@SubscribeEvent
 	public void onRenderGameOverlayPost(RenderGameOverlayEvent.Post event) {
-		if (event.type == ElementType.HEALTH) renderHealth = true;
-		else if ((event.type != ElementType.ALL) || !renderHealth) return;
-		
-		EntityPlayer player = ClientUtils.getLocalPlayer();
-		AHOProperties properties = EntityUtils.getProperties(player, AHOProperties.class);
-		if (properties.shieldAmount.get() <= 0) return;
-		
-		int shieldMaximum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.shieldMaximum);
-		int hearts = (int)(player.getMaxHealth() + 0.5F) / 2;
-		int shieldHalfHearts = (int)(Math.min(1, properties.shieldAmount.get() / shieldMaximum) * hearts * 2);
-		
-		int rows = shieldHalfHearts / 20;
-		int rowHeight = Math.max(10 - (rows - 2), 3);
-		
-		int left = event.resolution.getScaledWidth() / 2 - 91;
-		int top = event.resolution.getScaledHeight() - 39;
-		
-		GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
-		GL11.glEnable(GL11.GL_BLEND);
-		Minecraft.getMinecraft().renderEngine.bindTexture(icons);
-		for (int i = 0; i < shieldHalfHearts / 2; i++) {
-			int row = MathHelper.ceiling_float_int((i + 1) / 10.0F) - 1;
-			int x = left + i % 10 * 8;
-			int y = top - row * rowHeight;
-			icons.drawQuad(x, y, 0, 0, 9, 9);
+		switch (event.type) {
+			case HEALTH:
+				renderHealth = true;
+				break;
+			case ALL:
+				if (!renderHealth) break;
+				EntityPlayer player = ClientUtils.getLocalPlayer();
+				AHOProperties properties = EntityUtils.getProperties(player, AHOProperties.class);
+				if (properties.shieldAmount.get() <= 0) return;
+				
+				// Render shielding hearts (TODO).
+				int shieldMaximum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.shieldMaximum);
+				int hearts = (int)(player.getMaxHealth() + 0.5F) / 2;
+				int shieldHalfHearts = (int)(Math.min(1, properties.shieldAmount.get() / shieldMaximum) * hearts * 2);
+				
+				int rows = shieldHalfHearts / 20;
+				int rowHeight = Math.max(10 - (rows - 2), 3);
+				
+				int left = event.resolution.getScaledWidth() / 2 - 91;
+				int top = event.resolution.getScaledHeight() - 39;
+				
+				GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+				GL11.glEnable(GL11.GL_BLEND);
+				Minecraft.getMinecraft().renderEngine.bindTexture(icons);
+				for (int i = 0; i < shieldHalfHearts / 2; i++) {
+					int row = MathHelper.ceiling_float_int((i + 1) / 10.0F) - 1;
+					int x = left + i % 10 * 8;
+					int y = top - row * rowHeight;
+					icons.drawQuad(x, y, 0, 0, 9, 9);
+				}
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glPopAttrib();
+				break;
+			default: break;
 		}
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopAttrib();
 	}
 	
 }
