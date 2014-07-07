@@ -132,7 +132,7 @@ public class AHOWorldConfig extends Config {
 		super.load();
 		// If the preset setting is set to anything other
 		// than CUSTOM, change all settings to the preset's.
-		EnumPreset preset = get(AHOWorldConfig.generalPreset);
+		EnumPreset preset = this.<EnumPreset>get(AHOWorldConfig.generalPreset);
 		if (preset != EnumPreset.CUSTOM) usePreset(preset);
 	}
 	

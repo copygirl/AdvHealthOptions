@@ -58,7 +58,7 @@ public class AHOProperties extends EntityPropertiesBase {
 		resetFoodTimer(foodStats);
 		
 		// If the heal time is set to 0, disable all regeneration.
-		double regenHealTime = AdvHealthOptions.config.get(AHOWorldConfig.regenHealTime);
+		double regenHealTime = AdvHealthOptions.config.<Double>get(AHOWorldConfig.regenHealTime);
 		if ((regenHealTime <= 0) && !DEBUG) return;
 		
 		if (wasHurt) increasePenaltyTimer(player);
@@ -80,7 +80,7 @@ public class AHOProperties extends EntityPropertiesBase {
 		if (!shieldPreventHeal && (regenHealTime > 0) &&
 		    ((regenTimer.set(regenTimer.get() + (penaltyFactor * foodFactor) / 20.0)) > regenHealTime)) {
 			player.heal(1);
-			double regenExhaustion = AdvHealthOptions.config.get(AHOWorldConfig.regenExhaustion);
+			double regenExhaustion = AdvHealthOptions.config.<Double>get(AHOWorldConfig.regenExhaustion);
 			foodStats.addExhaustion((float)regenExhaustion);
 			regenTimer.set(regenTimer.get() - regenHealTime);
 		}
@@ -109,15 +109,15 @@ public class AHOProperties extends EntityPropertiesBase {
 	
 	/** Called when the player respawns. */
 	public void respawn(EntityPlayer player) {
-		int health = AdvHealthOptions.config.get(AHOWorldConfig.respawnHealth);
-		int food   = AdvHealthOptions.config.get(AHOWorldConfig.respawnFood);
-		int shield = AdvHealthOptions.config.get(AHOWorldConfig.respawnShield);
-		double penalty = AdvHealthOptions.config.get(AHOWorldConfig.respawnHurtPenalty);
+		int health = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.respawnHealth);
+		int food   = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.respawnFood);
+		int shield = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.respawnShield);
+		double penalty = AdvHealthOptions.config.<Double>get(AHOWorldConfig.respawnHurtPenalty);
 		
 		if (health < 20) player.setHealth(health);
 		if (food < 20) player.getFoodStats().setFoodLevel(food);
 		if (shield > 0) {
-			EnumShieldMode mode = AdvHealthOptions.config.get(AHOWorldConfig.shieldMode);
+			EnumShieldMode mode = AdvHealthOptions.config.<EnumShieldMode>get(AHOWorldConfig.shieldMode);
 			setShieldAmount(player, mode, shield);
 		}
 		if (penalty > 0) penaltyTimer.set(penalty);
@@ -126,7 +126,7 @@ public class AHOProperties extends EntityPropertiesBase {
 	boolean foodLevelSet = false;
 	/** Handles the hunger setting, returns if hunger is enabled. */
 	private boolean handleHunger(EntityPlayer player, FoodStats foodStats) {
-		EnumHunger hunger = AdvHealthOptions.config.get(AHOWorldConfig.hunger);
+		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger);
 		if (hunger == EnumHunger.ENABLE) return true;
 		
 		// Make direct changes to the food meter affect health directly.
@@ -146,18 +146,18 @@ public class AHOProperties extends EntityPropertiesBase {
 	
 	/** Handles the shield settings, returns if healing is paused. */
 	private boolean handleShield(EntityPlayer player, boolean wasHurt) {
-		EnumShieldMode mode = AdvHealthOptions.config.get(AHOWorldConfig.shieldMode);
+		EnumShieldMode mode = AdvHealthOptions.config.<EnumShieldMode>get(AHOWorldConfig.shieldMode);
 		double shieldAmount = getShieldAmount(player, mode);
 		
-		int maximum = AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximum);
+		int maximum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.shieldMaximum);
 		//if (AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximumArmor))
 		//	maximum = (maximum * player.getTotalArmorValue()) / 10;
 		
-		EnumShieldReq req = AdvHealthOptions.config.get(AHOWorldConfig.shieldRequirement);
+		EnumShieldReq req = AdvHealthOptions.config.<EnumShieldReq>get(AHOWorldConfig.shieldRequirement);
 		boolean atMaximum = (shieldAmount >= maximum);
 		
 		if (!wasHurt && !atMaximum && !((req == EnumShieldReq.SHIELD_REQ_HEALTH) && player.shouldHeal())) {
-			double shieldRechargeTime = AdvHealthOptions.config.get(AHOWorldConfig.shieldRechargeTime);
+			double shieldRechargeTime = AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldRechargeTime);
 			if ((shieldTimer.set(shieldTimer.get() + 1 / 20.0)) >= shieldRechargeTime) {
 				setShieldAmount(player, mode, Math.min(maximum, shieldAmount + 1));
 				shieldTimer.set(shieldTimer.get() - shieldRechargeTime);
@@ -190,20 +190,20 @@ public class AHOProperties extends EntityPropertiesBase {
 	private void increasePenaltyTimer(EntityPlayer player) {
 		float damageTaken = (healthBefore - player.getHealth());
 		
-		double hurtTime = AdvHealthOptions.config.get(AHOWorldConfig.hurtPenaltyTime);
-		double hurtTimeMaximum = AdvHealthOptions.config.get(AHOWorldConfig.hurtPenaltyTimeMaximum);
+		double hurtTime = AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyTime);
+		double hurtTimeMaximum = AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyTimeMaximum);
 		double penaltyIncrease = Math.min(hurtTimeMaximum, Math.max(0.5, damageTaken) * hurtTime);
 		
-		double hurtMaximum = AdvHealthOptions.config.get(AHOWorldConfig.hurtPenaltyMaximum);
+		double hurtMaximum = AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyMaximum);
 		if (penaltyTimer.get() < hurtMaximum)
 			penaltyTimer.set(Math.min(hurtMaximum, penaltyTimer.get() + penaltyIncrease));
 	}
 	 
 	private double calculateFoodFactor(int foodLevel) {
-		int regenHungerMinimum = AdvHealthOptions.config.get(AHOWorldConfig.regenHungerMinimum);
+		int regenHungerMinimum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.regenHungerMinimum);
 		if (foodLevel < regenHungerMinimum) return 0.0;
 		
-		int regenHungerMaximum = AdvHealthOptions.config.get(AHOWorldConfig.regenHungerMaximum);
+		int regenHungerMaximum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.regenHungerMaximum);
 		if (foodLevel >= regenHungerMaximum) return 1.0;
 		
 		return ((foodLevel - regenHungerMinimum + 1.0) /
@@ -212,7 +212,7 @@ public class AHOProperties extends EntityPropertiesBase {
 	
 	private double calculatePenaltyFactor(double penaltyTimer) {
 		if (penaltyTimer <= 0) return 1.0;
-		double hurtBuffer = AdvHealthOptions.config.get(AHOWorldConfig.hurtPenaltyBuffer);
+		double hurtBuffer = AdvHealthOptions.config.<Double>get(AHOWorldConfig.hurtPenaltyBuffer);
 		return ((penaltyTimer < hurtBuffer) ? (1 - (penaltyTimer / hurtBuffer)) : 0.0);
 	}
 	

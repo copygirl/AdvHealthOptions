@@ -34,7 +34,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event) {
-		EnumControl regenControl = AdvHealthOptions.config.get(AHOGlobalConfig.generalControl);
+		EnumControl regenControl = AdvHealthOptions.config.<EnumControl>get(AHOGlobalConfig.generalControl);
 		if ((regenControl == EnumControl.HIDDEN) ||
 		    !(event.gui instanceof GuiCreateWorld) ||
 		     (event.gui instanceof GuiCreateWorldCustom)) return;
@@ -49,7 +49,7 @@ public class ClientProxy extends CommonProxy {
 	public void onRenderGameOverlayPre(RenderGameOverlayEvent.Pre event) {
 		if (event.type == ElementType.ALL) renderHealth = false;
 		else if (event.type != ElementType.FOOD) return;
-		EnumHunger hunger = AdvHealthOptions.config.get(AHOWorldConfig.hunger);
+		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger);
 		if (hunger != EnumHunger.ENABLE)
 			event.setCanceled(true);
 	}
@@ -63,7 +63,7 @@ public class ClientProxy extends CommonProxy {
 		AHOProperties properties = EntityUtils.getProperties(player, AHOProperties.class);
 		if (properties.shieldAmount.get() <= 0) return;
 		
-		int shieldMaximum = AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximum);
+		int shieldMaximum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.shieldMaximum);
 		int hearts = (int)(player.getMaxHealth() + 0.5F) / 2;
 		int shieldHalfHearts = (int)(Math.min(1, properties.shieldAmount.get() / shieldMaximum) * hearts * 2);
 		
