@@ -4,7 +4,6 @@ import java.io.File;
 
 import net.mcft.copy.core.config.Config;
 import net.mcft.copy.core.config.SyncedSetting;
-import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.EnumSetting;
 import net.mcft.copy.core.config.setting.IntegerSetting;

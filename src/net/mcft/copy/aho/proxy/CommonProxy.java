@@ -2,7 +2,6 @@ package net.mcft.copy.aho.proxy;
 
 import net.mcft.copy.aho.entity.AHOProperties;
 import net.mcft.copy.core.util.EntityUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
