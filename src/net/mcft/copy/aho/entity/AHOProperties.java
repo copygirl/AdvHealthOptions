@@ -123,7 +123,8 @@ public class AHOProperties extends EntityPropertiesBase {
 		if (penalty > 0) penaltyTimer.set(penalty);
 	}
 	
-	boolean foodLevelSet = false;
+	private boolean foodLevelSet = false;
+	private Field foodLevelField = null;
 	/** Handles the hunger setting, returns if hunger is enabled. */
 	private boolean handleHunger(EntityPlayer player, FoodStats foodStats) {
 		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger);
@@ -137,7 +138,10 @@ public class AHOProperties extends EntityPropertiesBase {
 		}
 		
 		// Reset the food level and saturation.
-		foodStats.setFoodLevel(0);
+		if (foodLevelField == null)
+			foodLevelField = ReflectionHelper.findField(FoodStats.class, "field_75127_a", "foodStats");
+		try { foodLevelField.set(foodStats, 0); }
+		catch (Exception ex) { throw new RuntimeException(ex); }
 		foodStats.addStats(8, 20.0F);
 		foodLevelSet = true;
 		
