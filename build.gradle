@@ -23,6 +23,9 @@ archivesBaseName = project.projectDir.name + "-1.7.10"
 
 minecraft {
     version = "1.7.10-10.13.0.1152"
+    
+    replaceIn project.projectDir.name + ".java"
+    replace "@VERSION@", project.version
 }
 
 sourceSets.main {

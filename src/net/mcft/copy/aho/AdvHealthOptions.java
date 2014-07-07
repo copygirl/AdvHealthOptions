@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 
-@Mod(modid = AdvHealthOptions.MOD_ID, version = "${version}",
+@Mod(modid = AdvHealthOptions.MOD_ID, version = "@VERSION@",
      useMetadata = false, dependencies = "required-after:copycore")
 public class AdvHealthOptions {
 	
