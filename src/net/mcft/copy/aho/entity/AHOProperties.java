@@ -6,6 +6,7 @@ import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumHunger;
 import net.mcft.copy.aho.config.EnumShieldMode;
+import net.mcft.copy.aho.config.EnumShieldModifier;
 import net.mcft.copy.aho.config.EnumShieldReq;
 import net.mcft.copy.core.entity.EntityPropertiesBase;
 import net.mcft.copy.core.entity.EntityProperty;
@@ -31,6 +32,7 @@ public class AHOProperties extends EntityPropertiesBase {
 	
 	private boolean hurt = false;
 	private float healthBefore = 0;
+	private int previousShieldMaximum = 0;
 	
 	public AHOProperties() {
 		add(shieldAmount = new EntityPropertyPrimitive<Double>("shieldAmount", 0.0).setSaved().setSynced(false));
@@ -152,10 +154,17 @@ public class AHOProperties extends EntityPropertiesBase {
 	private boolean handleShield(EntityPlayer player, boolean wasHurt) {
 		EnumShieldMode mode = AdvHealthOptions.config.<EnumShieldMode>get(AHOWorldConfig.shieldMode);
 		double shieldAmount = getShieldAmount(player, mode);
+		int armorPoints = player.getTotalArmorValue();
 		
 		int maximum = AdvHealthOptions.config.<Integer>get(AHOWorldConfig.shieldMaximum);
-		//if (AdvHealthOptions.config.get(AHOWorldConfig.shieldMaximumArmor))
-		//	maximum = (maximum * player.getTotalArmorValue()) / 10;
+		EnumShieldModifier modifier = AdvHealthOptions.config.<EnumShieldModifier>get(AHOWorldConfig.shieldModifier);
+		if (modifier == EnumShieldModifier.ARMOR) {
+			maximum = (maximum * armorPoints) / 20;
+			// If total armor points got decreased, remove some of the shielding.
+			if ((maximum < previousShieldMaximum) && (shieldAmount > maximum))
+				shieldAmount = setShieldAmount(player, mode, Math.max(maximum, shieldAmount - (previousShieldMaximum - maximum)));
+		} else if (modifier == EnumShieldModifier.HEALTH)
+			maximum = (maximum * (int)(player.getHealth() + 0.5)) / (int)player.getMaxHealth();
 		
 		EnumShieldReq req = AdvHealthOptions.config.<EnumShieldReq>get(AHOWorldConfig.shieldRequirement);
 		boolean atMaximum = (shieldAmount >= maximum);
@@ -166,17 +175,19 @@ public class AHOProperties extends EntityPropertiesBase {
 				setShieldAmount(player, mode, Math.min(maximum, shieldAmount + 1));
 				shieldTimer.set(shieldTimer.get() - shieldRechargeTime);
 			}
-		} else shieldTimer.set(-AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldTimeout));
+		} else shieldTimer.set((wasHurt ? -AdvHealthOptions.config.<Double>get(AHOWorldConfig.shieldTimeout) : 0.0));
+		previousShieldMaximum = maximum;
 		return ((req == EnumShieldReq.HEALTH_REQ_SHIELD) && !atMaximum);
 	}
 	
 	private double getShieldAmount(EntityPlayer player, EnumShieldMode mode) {
 		return ((mode == EnumShieldMode.ABSORPTION) ? player.getAbsorptionAmount() : shieldAmount.get());
 	}
-	private void setShieldAmount(EntityPlayer player, EnumShieldMode mode, double amount) {
+	private double setShieldAmount(EntityPlayer player, EnumShieldMode mode, double amount) {
 		if (mode == EnumShieldMode.ABSORPTION)
 			player.setAbsorptionAmount((float)amount);
 		else shieldAmount.set(amount);
+		return amount;
 	}
 	
 	private static Field foodTimerField = null;
