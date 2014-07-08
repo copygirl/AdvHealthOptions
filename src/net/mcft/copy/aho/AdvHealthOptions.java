@@ -2,7 +2,7 @@ package net.mcft.copy.aho;
 
 import java.io.File;
 
-import net.mcft.copy.aho.client.GuiCreateWorldCustom;
+import net.mcft.copy.aho.client.gui.AHOGuiCreateWorld;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumPreset;
@@ -19,10 +19,12 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 
 @Mod(modid = AdvHealthOptions.MOD_ID, version = "@VERSION@",
-     useMetadata = false, dependencies = "required-after:copycore")
+     useMetadata = false, dependencies = "required-after:copycore",
+     guiFactory = "net.mcft.copy.aho.client.gui.AHOGuiFactory")
 public class AdvHealthOptions {
 	
 	public static final String MOD_ID = "AdvHealthOptions";
+	public static final String MOD_NAME = "Advanced Health Options";
 	
 	@SidedProxy(clientSide = "net.mcft.copy.aho.proxy.ClientProxy",
 	            serverSide = "net.mcft.copy.aho.proxy.CommonProxy")
@@ -62,7 +64,7 @@ public class AdvHealthOptions {
 		
 		// If the world was just created using the	
 		// create world screen, use the selected preset.
-		EnumPreset preset = GuiCreateWorldCustom.getAndResetPreset();
+		EnumPreset preset = AHOGuiCreateWorld.getAndResetPreset();
 		if (preset != EnumPreset.CUSTOM) {
 			worldConfig.usePreset(preset);
 			worldConfig.save();

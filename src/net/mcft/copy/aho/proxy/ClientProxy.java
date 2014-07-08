@@ -1,7 +1,7 @@
 package net.mcft.copy.aho.proxy;
 
 import net.mcft.copy.aho.AdvHealthOptions;
-import net.mcft.copy.aho.client.GuiCreateWorldCustom;
+import net.mcft.copy.aho.client.gui.AHOGuiCreateWorld;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumControl;
@@ -37,11 +37,11 @@ public class ClientProxy extends CommonProxy {
 		EnumControl regenControl = AdvHealthOptions.config.<EnumControl>get(AHOGlobalConfig.generalControl);
 		if ((regenControl == EnumControl.HIDDEN) ||
 		    !(event.gui instanceof GuiCreateWorld) ||
-		     (event.gui instanceof GuiCreateWorldCustom)) return;
+		     (event.gui instanceof AHOGuiCreateWorld)) return;
 		// Replace default create world GUI with custom one. This might be
 		// bad if other mods do the same, or try to modify the default one.
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiCreateWorldCustom(mc.currentScreen));
+		mc.displayGuiScreen(new AHOGuiCreateWorld(mc.currentScreen));
 		event.setCanceled(true);
 	}
 	

@@ -29,7 +29,7 @@ public class AHOWorldConfig extends Config {
 	
 	public static final Setting regenHungerMaximum =
 		new IntegerSetting("regeneration.hungerMaximum", EnumPreset.NORMAL.regenHungerMaximum).setValidRange(0, 20).setComment(
-				"Natural regeneration is at its maximum at this hunger level. Valid values: 0 - 20.");
+				"Natural regeneration is at its maximum at and above this hunger level. Valid values: 0 - 20.");
 	
 	public static final Setting regenExhaustion =
 			new DoubleSetting("regeneration.exhaustion", EnumPreset.NORMAL.regenExhaustion).setValidRange(0.0, Double.MAX_VALUE).setComment(

@@ -1,6 +1,7 @@
-package net.mcft.copy.aho.client;
+package net.mcft.copy.aho.client.gui;
 
 import net.mcft.copy.aho.AdvHealthOptions;
+import net.mcft.copy.aho.client.AHOLocalization;
 import net.mcft.copy.aho.config.AHOGlobalConfig;
 import net.mcft.copy.aho.config.AHOWorldConfig;
 import net.mcft.copy.aho.config.EnumControl;
@@ -16,7 +17,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiCreateWorldCustom extends GuiCreateWorld {
+public class AHOGuiCreateWorld extends GuiCreateWorld {
 	
 	private static EnumPreset preset = EnumPreset.CUSTOM;
 	
@@ -29,7 +30,7 @@ public class GuiCreateWorldCustom extends GuiCreateWorld {
 	private GuiButton buttonRegenMode;
 	private static EnumPreset regenMode;
 	
-	public GuiCreateWorldCustom(GuiScreen gui) {
+	public AHOGuiCreateWorld(GuiScreen gui) {
 		super(gui);
 		regenMode = AdvHealthOptions.config.<EnumPreset>get(AHOWorldConfig.generalPreset);
 	}
