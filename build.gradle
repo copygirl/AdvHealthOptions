@@ -17,12 +17,12 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.3.0.5"
+version = "1.4.0.6"
 group = "net.mcft.copy.aho"
 archivesBaseName = project.projectDir.name + "-1.7.10"
 
 minecraft {
-    version = "1.7.10-10.13.0.1152"
+    version = "1.7.10-10.13.0.1180"
     
     replaceIn project.projectDir.name + ".java"
     replace "@VERSION@", project.version
