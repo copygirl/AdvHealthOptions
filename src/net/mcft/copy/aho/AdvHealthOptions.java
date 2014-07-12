@@ -32,9 +32,9 @@ public class AdvHealthOptions {
 	
 	public static PriorityConfig config = new PriorityConfig();
 	
-	private static AHOGlobalConfig globalConfig;
-	private static AHOWorldConfig worldConfig;
-	private static SyncedConfig syncedConfig;
+	public static AHOGlobalConfig globalConfig;
+	public static AHOWorldConfig worldConfig;
+	public static SyncedConfig syncedConfig;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
