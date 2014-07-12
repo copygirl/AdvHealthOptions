@@ -129,7 +129,7 @@ public class AHOProperties extends EntityPropertiesBase {
 	private Field foodLevelField = null;
 	/** Handles the hunger setting, returns if hunger is enabled. */
 	private boolean handleHunger(EntityPlayer player, FoodStats foodStats) {
-		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger);
+		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.miscHunger);
 		if (hunger == EnumHunger.ENABLE) return true;
 		
 		// Make direct changes to the food meter affect health directly.

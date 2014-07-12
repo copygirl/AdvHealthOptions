@@ -111,7 +111,7 @@ public class AHOWorldConfig extends Config {
 	
 	// Miscellaneous
 	@SyncedSetting
-	public static final Setting hunger =
+	public static final Setting miscHunger =
 			new EnumSetting("misc.hunger", EnumHunger.ENABLE).setComment(
 					"ENABLE  = Hunger functions like normal and affects regeneration speed.\n" +
 					"DISABLE = Hunger is completely disabled, food can be eaten but is ignored.\n" +

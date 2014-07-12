@@ -62,7 +62,7 @@ public class ClientProxy extends CommonProxy {
 				break;
 			case FOOD:
 				// Don't render food meter if hunger is disabled.
-				if (AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.hunger) != EnumHunger.ENABLE)
+				if (AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.miscHunger) != EnumHunger.ENABLE)
 					event.setCanceled(true);
 				break;
 			default: break;
