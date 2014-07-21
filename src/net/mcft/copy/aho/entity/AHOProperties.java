@@ -117,7 +117,7 @@ public class AHOProperties extends EntityPropertiesBase {
 		double penalty = AdvHealthOptions.config.<Double>get(AHOWorldConfig.respawnHurtPenalty);
 		
 		if (health < 20) player.setHealth(health);
-		if (food < 20) player.getFoodStats().setFoodLevel(food);
+		if (food < 20) setFoodLevel(player, food);
 		if (shield > 0) {
 			EnumShieldMode mode = AdvHealthOptions.config.<EnumShieldMode>get(AHOWorldConfig.shieldMode);
 			setShieldAmount(player, mode, shield);
@@ -126,7 +126,6 @@ public class AHOProperties extends EntityPropertiesBase {
 	}
 	
 	private boolean foodLevelSet = false;
-	private Field foodLevelField = null;
 	/** Handles the hunger setting, returns if hunger is enabled. */
 	private boolean handleHunger(EntityPlayer player, FoodStats foodStats) {
 		EnumHunger hunger = AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.miscHunger);
@@ -140,14 +139,19 @@ public class AHOProperties extends EntityPropertiesBase {
 		}
 		
 		// Reset the food level and saturation.
-		if (foodLevelField == null)
-			foodLevelField = ReflectionHelper.findField(FoodStats.class, "field_75127_a", "foodStats");
-		try { foodLevelField.set(foodStats, 0); }
-		catch (Exception ex) { throw new RuntimeException(ex); }
+		setFoodLevel(player, 0);
 		foodStats.addStats(8, 20.0F);
 		foodLevelSet = true;
 		
 		return false;
+	}
+	
+	private static Field foodLevelField = null;
+	private void setFoodLevel(EntityPlayer player, int level) {
+		if (foodLevelField == null)
+			foodLevelField = ReflectionHelper.findField(FoodStats.class, "field_75127_a", "foodLevel");
+		try { foodLevelField.set(player.getFoodStats(), level); }
+		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
 	
 	/** Handles the shield settings, returns if healing is paused. */
