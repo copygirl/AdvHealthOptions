@@ -4,7 +4,7 @@ import net.mcft.copy.aho.AdvHealthOptions;
 
 public final class AHOLocalization {
 	
-	public static final String REGEN_MODE = AdvHealthOptions.MOD_ID.toLowerCase() + ".regenMode";
+	public static final String REGEN_MODE = "selectWorld." + AdvHealthOptions.MOD_ID.toLowerCase() + ".regenMode";
 	
 	private AHOLocalization() {  }
 	

@@ -4,7 +4,6 @@ import java.util.Set;
 
 import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.config.AHOWorldConfig;
-import net.mcft.copy.aho.config.EnumPreset;
 import net.mcft.copy.core.client.gui.GuiConfigBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -38,14 +37,6 @@ public class AHOGuiFactory implements IModGuiFactory {
 			getCategoryEntry("regeneration").enabled = custom;
 			getCategoryEntry("hurtPenalty").enabled = custom;
 			getCategoryEntry("respawn").enabled = custom;
-		}
-		
-		@Override
-		public void onConfigChanged() {
-			EnumPreset preset = AdvHealthOptions.globalConfig.<EnumPreset>get(AHOWorldConfig.generalPreset);
-			if (preset != EnumPreset.CUSTOM)
-				AdvHealthOptions.globalConfig.usePreset(preset);
-			super.onConfigChanged();
 		}
 		
 	}

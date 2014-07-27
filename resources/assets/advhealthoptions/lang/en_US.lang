@@ -1,78 +1,78 @@
-advhealthoptions.config.general.control=Mode Control
-advhealthoptions.config.general.control.tooltip=DEFAULT = Settings are used as default in the world creation screen. LOCK = Settings are locked in the world creation screen. HIDDEN = Settings are used automatically and world creation screen is not modified. When using the DEFAULT setting, new worlds will generate with a world-specific config file. Once a world has a config file, changing the global settings will have no effect on that world.
-advhealthoptions.config.general.description=Custom Description
-advhealthoptions.config.general.description.tooltip=The description shown when CUSTOM regen mode is selected. Can be a string to be translated, for example 'advhealthoptions.regenMode.hard.desc'.
-advhealthoptions.config.general.preset=Preset
-advhealthoptions.config.general.preset.tooltip=Choose a preset you want to go with, or CUSTOM if you want to build your own. WARNING: If you select anything other than CUSTOM, all settings will be overwritten!
+config.advhealthoptions.general.control=Mode Control
+config.advhealthoptions.general.control.tooltip=DEFAULT = Settings are used as default in the world creation screen. LOCK = Settings are locked in the world creation screen. HIDDEN = Settings are used automatically and world creation screen is not modified. When using the DEFAULT setting, new worlds will generate with a world-specific config file. Once a world has a config file, changing the global settings will have no effect on that world.
+config.advhealthoptions.general.description=Custom Description
+config.advhealthoptions.general.description.tooltip=The description shown when CUSTOM regen mode is selected. Can be a string to be translated, for example 'advhealthoptions.regenMode.hard.desc'.
+config.advhealthoptions.general.preset=Preset
+config.advhealthoptions.general.preset.tooltip=Choose a preset you want to go with, or CUSTOM if you want to build your own. WARNING: If you select anything other than CUSTOM, all settings will be overwritten!
 
-advhealthoptions.config.category.regeneration=Regeneration Settings
-advhealthoptions.config.category.regeneration.tooltip=Controls the natural regeneration of players
-advhealthoptions.config.regeneration.healTime=Heal Time
-advhealthoptions.config.regeneration.healTime.tooltip=Minimum time in seconds between healing half a heart. Use 0 to disable.
-advhealthoptions.config.regeneration.hungerMinimum=Minimum Hunger
-advhealthoptions.config.regeneration.hungerMinimum.tooltip=Natural regeneration starts at this hunger level.
-advhealthoptions.config.regeneration.hungerMaximum=Maximum Hunger
-advhealthoptions.config.regeneration.hungerMaximum.tooltip=Natural regeneration is at its maximum at and above this hunger level.
-advhealthoptions.config.regeneration.exhaustion=Heal Exhaustion
-advhealthoptions.config.regeneration.exhaustion.tooltip=Exhaustion added when healing naturally (higher = more food needed).
-advhealthoptions.config.regeneration.hungerPoisonFactor=Hunger Poison Factor
-advhealthoptions.config.regeneration.hungerPoisonFactor.tooltip=Regeneration speed is multiplied by this if food poisoned (for example from rotten flesh).
+config.advhealthoptions.category.regeneration=Regeneration Settings
+config.advhealthoptions.category.regeneration.tooltip=Controls the natural regeneration of players
+config.advhealthoptions.regeneration.healTime=Heal Time
+config.advhealthoptions.regeneration.healTime.tooltip=Minimum time in seconds between healing half a heart. Use 0 to disable.
+config.advhealthoptions.regeneration.hungerMinimum=Minimum Hunger
+config.advhealthoptions.regeneration.hungerMinimum.tooltip=Natural regeneration starts at this hunger level.
+config.advhealthoptions.regeneration.hungerMaximum=Maximum Hunger
+config.advhealthoptions.regeneration.hungerMaximum.tooltip=Natural regeneration is at its maximum at and above this hunger level.
+config.advhealthoptions.regeneration.exhaustion=Heal Exhaustion
+config.advhealthoptions.regeneration.exhaustion.tooltip=Exhaustion added when healing naturally (higher = more food needed).
+config.advhealthoptions.regeneration.hungerPoisonFactor=Hunger Poison Factor
+config.advhealthoptions.regeneration.hungerPoisonFactor.tooltip=Regeneration speed is multiplied by this if food poisoned (for example from rotten flesh).
 
-advhealthoptions.config.category.hurtPenalty=Hurt Penalty Settings
-advhealthoptions.config.category.hurtPenalty.tooltip=Controls how being damaged affects regeneration
-advhealthoptions.config.hurtPenalty.time=Penalty Time
-advhealthoptions.config.hurtPenalty.time.tooltip=Penalty time in seconds added per point of damage (= half a heart). When no damage is taken from a hit, half of this value is added instead.
-advhealthoptions.config.hurtPenalty.timeMaximum=Penalty Time Maximum
-advhealthoptions.config.hurtPenalty.timeMaximum.tooltip=Maximum penalty time added at once when taking damage.
-advhealthoptions.config.hurtPenalty.maximum=Total Maximum
-advhealthoptions.config.hurtPenalty.maximum.tooltip=Maximum penalty time that can be accumulated.
-advhealthoptions.config.hurtPenalty.buffer=Penalty Buffer
-advhealthoptions.config.hurtPenalty.buffer.tooltip=Penalty time where regeneration speed decreases linearly. When the penalty time is larger than this amount, regeneration is inactive.
+config.advhealthoptions.category.hurtPenalty=Hurt Penalty Settings
+config.advhealthoptions.category.hurtPenalty.tooltip=Controls how being damaged affects regeneration
+config.advhealthoptions.hurtPenalty.time=Penalty Time
+config.advhealthoptions.hurtPenalty.time.tooltip=Penalty time in seconds added per point of damage (= half a heart). When no damage is taken from a hit, half of this value is added instead.
+config.advhealthoptions.hurtPenalty.timeMaximum=Penalty Time Maximum
+config.advhealthoptions.hurtPenalty.timeMaximum.tooltip=Maximum penalty time added at once when taking damage.
+config.advhealthoptions.hurtPenalty.maximum=Total Maximum
+config.advhealthoptions.hurtPenalty.maximum.tooltip=Maximum penalty time that can be accumulated.
+config.advhealthoptions.hurtPenalty.buffer=Penalty Buffer
+config.advhealthoptions.hurtPenalty.buffer.tooltip=Penalty time where regeneration speed decreases linearly. When the penalty time is larger than this amount, regeneration is inactive.
 
-advhealthoptions.config.category.respawn=Respawn Settings
-advhealthoptions.config.category.respawn.tooltip=Controls with how much health, food, etc. players respawn with
-advhealthoptions.config.respawn.health=Health
-advhealthoptions.config.respawn.health.tooltip=Health players respawn with after death.
-advhealthoptions.config.respawn.food=Food
-advhealthoptions.config.respawn.food.tooltip=Food players respawn with after death.
-advhealthoptions.config.respawn.shield=Shield
-advhealthoptions.config.respawn.shield.tooltip=Shield points players respawn with after death. The shield remains until it's used up.
-advhealthoptions.config.respawn.hurtPenalty=Hurt Penalty
-advhealthoptions.config.respawn.hurtPenalty.tooltip=Penalty time players respawn with after death. Can be larger than the maximum hurt penalty time.
+config.advhealthoptions.category.respawn=Respawn Settings
+config.advhealthoptions.category.respawn.tooltip=Controls with how much health, food, etc. players respawn with
+config.advhealthoptions.respawn.health=Health
+config.advhealthoptions.respawn.health.tooltip=Health players respawn with after death.
+config.advhealthoptions.respawn.food=Food
+config.advhealthoptions.respawn.food.tooltip=Food players respawn with after death.
+config.advhealthoptions.respawn.shield=Shield
+config.advhealthoptions.respawn.shield.tooltip=Shield points players respawn with after death. The shield remains until it's used up.
+config.advhealthoptions.respawn.hurtPenalty=Hurt Penalty
+config.advhealthoptions.respawn.hurtPenalty.tooltip=Penalty time players respawn with after death. Can be larger than the maximum hurt penalty time.
 
-advhealthoptions.config.category.shield=Shield Settings
-advhealthoptions.config.category.shield.tooltip=Controls the shield which acts as a second buffer above regular health
-advhealthoptions.config.shield.mode=Shield Mode
-advhealthoptions.config.shield.mode.tooltip=SUBTRACTION = Decreases damage taken before armor calculation. ABSORPTION = Uses vanilla absorption hearts, applied after armor.
-advhealthoptions.config.shield.maximum=Maximum
-advhealthoptions.config.shield.maximum.tooltip=Maximum shield points that can be recharged. Use 0 to disable.
-advhealthoptions.config.shield.modifier=Modifier
-advhealthoptions.config.shield.modifier.tooltip=NONE = Maximum shield is not affected by anything. ARMOR = Maximum shield is affected by armor points. HEALTH = Maximum shield is affected by current health.
-advhealthoptions.config.shield.timeout=Timeout
-advhealthoptions.config.shield.timeout.tooltip=Time for which the shield doesn't recharge after being hit.
-advhealthoptions.config.shield.rechargeTime=Recharge Time
-advhealthoptions.config.shield.rechargeTime.tooltip=Time it takes to recharge one shield point.
-advhealthoptions.config.shield.requirement=Requirement
-advhealthoptions.config.shield.requirement.tooltip=Controls whether the shield requires full health to recharge or health requires a full shield to regenerate. 
+config.advhealthoptions.category.shield=Shield Settings
+config.advhealthoptions.category.shield.tooltip=Controls the shield which acts as a second buffer above regular health
+config.advhealthoptions.shield.mode=Shield Mode
+config.advhealthoptions.shield.mode.tooltip=SUBTRACTION = Decreases damage taken before armor calculation. ABSORPTION = Uses vanilla absorption hearts, applied after armor.
+config.advhealthoptions.shield.maximum=Maximum
+config.advhealthoptions.shield.maximum.tooltip=Maximum shield points that can be recharged. Use 0 to disable.
+config.advhealthoptions.shield.modifier=Modifier
+config.advhealthoptions.shield.modifier.tooltip=NONE = Maximum shield is not affected by anything. ARMOR = Maximum shield is affected by armor points. HEALTH = Maximum shield is affected by current health.
+config.advhealthoptions.shield.timeout=Timeout
+config.advhealthoptions.shield.timeout.tooltip=Time for which the shield doesn't recharge after being hit.
+config.advhealthoptions.shield.rechargeTime=Recharge Time
+config.advhealthoptions.shield.rechargeTime.tooltip=Time it takes to recharge one shield point.
+config.advhealthoptions.shield.requirement=Requirement
+config.advhealthoptions.shield.requirement.tooltip=Controls whether the shield requires full health to recharge or health requires a full shield to regenerate. 
 
-advhealthoptions.config.category.misc=Miscellaneous Settings
-advhealthoptions.config.category.misc.tooltip=Other settings which don't fit anywhere else
-advhealthoptions.config.misc.hunger=Hunger Options
-advhealthoptions.config.misc.hunger.tooltip=ENABLE = Hunger functions like normal and affects regeneration speed. DISABLE = Hunger is completely disabled, food can be eaten but is ignored. HEALTH = Hunger is disabled, eating food directly translates to health. When hunger is disabled the food meter will internally be locked at 8, enough to sprint.
+config.advhealthoptions.category.misc=Miscellaneous Settings
+config.advhealthoptions.category.misc.tooltip=Other settings which don't fit anywhere else
+config.advhealthoptions.misc.hunger=Hunger Options
+config.advhealthoptions.misc.hunger.tooltip=ENABLE = Hunger functions like normal and affects regeneration speed. DISABLE = Hunger is completely disabled, food can be eaten but is ignored. HEALTH = Hunger is disabled, eating food directly translates to health. When hunger is disabled the food meter will internally be locked at 8, enough to sprint.
 
 
-advhealthoptions.regenMode=Regen Mode %1$s
-advhealthoptions.regenMode.peaceful=Peaceful
-advhealthoptions.regenMode.peaceful.desc=Very fast natural health regeneration
-advhealthoptions.regenMode.easy=Easy
-advhealthoptions.regenMode.easy.desc=Fast natural health regeneration
-advhealthoptions.regenMode.normal=Normal
-advhealthoptions.regenMode.normal.desc=Average natural health regeneration
-advhealthoptions.regenMode.hard=Hard
-advhealthoptions.regenMode.hard.desc=Slow natural health regeneration
-advhealthoptions.regenMode.hardcore=Hardcore
-advhealthoptions.regenMode.hardcore.desc=Very slow natural health regeneration
-advhealthoptions.regenMode.ultrahardcore=Ultra Hardcore
-advhealthoptions.regenMode.ultrahardcore.desc=No natural health regeneration
-advhealthoptions.regenMode.custom=Custom
-advhealthoptions.regenMode.custom.desc=Use regeneration settings from config file
+selectWorld.advhealthoptions.regenMode=Regen Mode %1$s
+selectWorld.advhealthoptions.regenMode.peaceful=Peaceful
+selectWorld.advhealthoptions.regenMode.peaceful.desc=Very fast natural health regeneration
+selectWorld.advhealthoptions.regenMode.easy=Easy
+selectWorld.advhealthoptions.regenMode.easy.desc=Fast natural health regeneration
+selectWorld.advhealthoptions.regenMode.normal=Normal
+selectWorld.advhealthoptions.regenMode.normal.desc=Average natural health regeneration
+selectWorld.advhealthoptions.regenMode.hard=Hard
+selectWorld.advhealthoptions.regenMode.hard.desc=Slow natural health regeneration
+selectWorld.advhealthoptions.regenMode.hardcore=Hardcore
+selectWorld.advhealthoptions.regenMode.hardcore.desc=Very slow natural health regeneration
+selectWorld.advhealthoptions.regenMode.ultrahardcore=Ultra Hardcore
+selectWorld.advhealthoptions.regenMode.ultrahardcore.desc=No natural health regeneration
+selectWorld.advhealthoptions.regenMode.custom=Custom
+selectWorld.advhealthoptions.regenMode.custom.desc=Use regeneration settings from config file

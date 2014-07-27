@@ -2,6 +2,7 @@ package net.mcft.copy.aho.config;
 
 import java.io.File;
 
+import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.client.AHOLocalization;
 import net.mcft.copy.core.config.setting.EnumSetting;
 import net.mcft.copy.core.config.setting.Setting;
@@ -26,6 +27,13 @@ public class AHOGlobalConfig extends AHOWorldConfig {
 	
 	public AHOGlobalConfig(File file) {
 		super(file);
+	}
+	
+	@Override
+	public void update() {
+		EnumPreset preset = AdvHealthOptions.globalConfig.<EnumPreset>get(AHOWorldConfig.generalPreset);
+		if (preset != EnumPreset.CUSTOM)
+			AdvHealthOptions.globalConfig.usePreset(preset);
 	}
 	
 }

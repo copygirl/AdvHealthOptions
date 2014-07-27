@@ -42,6 +42,7 @@ public class AdvHealthOptions {
 		globalConfig = new AHOGlobalConfig(event.getSuggestedConfigurationFile());
 		globalConfig.load();
 		proxy.init();
+		globalConfig.update();
 		globalConfig.save();
 		
 		syncedConfig = new SyncedConfig(MOD_ID);
