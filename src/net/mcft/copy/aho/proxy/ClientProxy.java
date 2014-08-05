@@ -65,23 +65,7 @@ public class ClientProxy extends CommonProxy {
 				if (AdvHealthOptions.config.<EnumHunger>get(AHOWorldConfig.miscHunger) != EnumHunger.ENABLE)
 					event.setCanceled(true);
 				break;
-			default: break;
-		}
-	}
-	
-	@SubscribeEvent
-	public void onRenderGameOverlayPost(RenderGameOverlayEvent.Post event) {
-		EnumShieldModifier modifier = AdvHealthOptions.config.<EnumShieldModifier>get(AHOWorldConfig.shieldModifier);
-		switch (event.type) {
-			case HEALTH:
-				if (modifier != EnumShieldModifier.ARMOR)
-					renderShield = true;
-				break;
-			case ARMOR:
-				if (modifier == EnumShieldModifier.ARMOR)
-					renderShield = true;
-				break;
-			case ALL:
+			case HOTBAR:
 				if (!renderShield) break;
 				else if (modifier == EnumShieldModifier.NONE) {
 					renderTop = GuiIngameForge.left_height;
@@ -120,6 +104,22 @@ public class ClientProxy extends CommonProxy {
 						icons.drawQuad(x, y, 0, v, 9, 9);
 					else icons.drawQuad(x, y, 18, v, 9, 9);
 				}
+				break;
+			default: break;
+		}
+	}
+	
+	@SubscribeEvent
+	public void onRenderGameOverlayPost(RenderGameOverlayEvent.Post event) {
+		EnumShieldModifier modifier = AdvHealthOptions.config.<EnumShieldModifier>get(AHOWorldConfig.shieldModifier);
+		switch (event.type) {
+			case HEALTH:
+				if (modifier != EnumShieldModifier.ARMOR)
+					renderShield = true;
+				break;
+			case ARMOR:
+				if (modifier == EnumShieldModifier.ARMOR)
+					renderShield = true;
 				break;
 			default: break;
 		}
