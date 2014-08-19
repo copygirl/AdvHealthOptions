@@ -31,7 +31,6 @@ public class AdvHealthOptions {
 	private static CommonProxy proxy;
 	
 	public static PriorityConfig config = new PriorityConfig();
-	
 	public static AHOGlobalConfig globalConfig;
 	public static AHOWorldConfig worldConfig;
 	public static SyncedConfig syncedConfig;
@@ -40,9 +39,8 @@ public class AdvHealthOptions {
 	public void preInit(FMLPreInitializationEvent event) {
 		
 		globalConfig = new AHOGlobalConfig(event.getSuggestedConfigurationFile());
+		
 		globalConfig.load();
-		proxy.init();
-		globalConfig.update();
 		globalConfig.save();
 		
 		syncedConfig = new SyncedConfig(MOD_ID);
@@ -50,6 +48,8 @@ public class AdvHealthOptions {
 		
 		config.add(Priority.GLOBAL, globalConfig);
 		config.add(Priority.SYNCED, syncedConfig);
+		
+		proxy.init();
 		
 	}
 	

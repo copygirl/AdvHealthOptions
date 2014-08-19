@@ -3,6 +3,7 @@ package net.mcft.copy.aho.config;
 import java.io.File;
 
 import net.mcft.copy.core.config.Config;
+import net.mcft.copy.core.config.ISettingChangedHandler;
 import net.mcft.copy.core.config.SyncedSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.EnumSetting;
@@ -121,6 +122,13 @@ public class AHOWorldConfig extends Config {
 	
 	public AHOWorldConfig(File file) {
 		super(file);
+		
+		registerSettingChangedHandler(generalPreset, new ISettingChangedHandler<EnumPreset>() {
+			@Override public void onChanged(Setting<EnumPreset> setting, EnumPreset value) {
+				if (value != EnumPreset.CUSTOM) usePreset(value);
+			}
+		});
+		
 		addAllViaReflection();
 		addCategoryComment("hurtPenalty",
 				"When taking damage, a variable amount of 'penalty time' is added.\n" +
