@@ -47,6 +47,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@SubscribeEvent
 	public void onRenderGameOverlayPre(RenderGameOverlayEvent.Pre event) {
+		EntityPlayer player = ClientUtils.getLocalPlayer();
 		EnumShieldModifier modifier = AdvHealthOptions.config.<EnumShieldModifier>get(AHOWorldConfig.shieldModifier);
 		switch (event.type) {
 			case ALL:
@@ -68,11 +69,12 @@ public class ClientProxy extends CommonProxy {
 			case HOTBAR:
 				if (!renderShield) break;
 				else if (modifier == EnumShieldModifier.NONE) {
+					if (player.getTotalArmorValue() <= 0)
+						GuiIngameForge.left_height -= 10;
 					renderTop = GuiIngameForge.left_height;
 					GuiIngameForge.left_height += 10;
-				} 
+				}
 				
-				EntityPlayer player = ClientUtils.getLocalPlayer();
 				EnumShieldMode mode = AdvHealthOptions.config.<EnumShieldMode>get(AHOWorldConfig.shieldMode);
 				AHOProperties properties = EntityUtils.getProperties(player, AHOProperties.class);
 				
