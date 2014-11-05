@@ -1,6 +1,9 @@
 package net.mcft.copy.aho.entity;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.mcft.copy.aho.AdvHealthOptions;
 import net.mcft.copy.aho.config.AHOWorldConfig;
@@ -23,6 +26,11 @@ public class AHOProperties extends EntityPropertiesBase {
 	public static final boolean DEBUG = false;
 	
 	public static final String IDENTIFIER = AdvHealthOptions.MOD_ID;
+	
+	/** The list of damage sources which non-health shielding doesn't protect from. */
+	public static final Set<String> nonHealthUnsupportedDamageSources =
+			new HashSet<String>(Arrays.asList(
+					"drown", "starve", "outOfWorld", "wither"));
 	
 	
 	public final EntityProperty<Double> shieldAmount;
@@ -99,10 +107,17 @@ public class AHOProperties extends EntityPropertiesBase {
 	// Utility methods
 	
 	/** Called when the player is hurt. */
-	public double hurt(EntityPlayer player, double damage) {
+	public double hurt(EntityPlayer player, double damage, DamageSource source) {
 		if (!hurt)
 			healthBefore = player.getHealth();
 		hurt = true;
+		
+		// Don't shield from some damage types when modifier isn't HEALTH.
+		EnumShieldModifier modifier = AdvHealthOptions.config.<EnumShieldModifier>get(AHOWorldConfig.shieldModifier);
+		if ((modifier != EnumShieldModifier.HEALTH) &&
+		    nonHealthUnsupportedDamageSources.contains(source.damageType))
+			return damage;
+		
 		// Apply SUBTRACTION mode shielding.
 		double reduction = Math.min(damage, shieldAmount.get());
 		shieldAmount.set(shieldAmount.get() - reduction);

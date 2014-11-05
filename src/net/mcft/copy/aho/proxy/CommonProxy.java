@@ -37,7 +37,7 @@ public class CommonProxy {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onLivingHurt(LivingHurtEvent event) {
 		if (event.entity instanceof EntityPlayerMP)
-			event.ammount = (float)getProperties(event.entity).hurt((EntityPlayer)event.entity, event.ammount);
+			event.ammount = (float)getProperties(event.entity).hurt((EntityPlayer)event.entity, event.ammount, event.source);
 	}
 	
 	@SubscribeEvent
