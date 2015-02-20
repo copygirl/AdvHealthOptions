@@ -18,6 +18,11 @@ public class AHOGlobalConfig extends AHOWorldConfig {
 					"When using the DEFAULT setting, new worlds will generate with a world-specific config file.\n" +
 					"Once a world has a config file, changing the global settings will have no effect on that world.");
 	
+	public static final Setting generalName =
+			new StringSetting("general.name", AHOLocalization.REGEN_MODE + ".custom").setComment(
+					"The name of the CUSTOM regen mode, displayed on the button.\n" +
+					"Can be a string to be translated, for example '" + AHOLocalization.REGEN_MODE + ".custom'.");
+	
 	public static final Setting generalDescription =
 			new StringSetting("general.description", AHOLocalization.REGEN_MODE + ".custom.desc").setComment(
 					"The description shown when CUSTOM regen mode is selected.\n" +

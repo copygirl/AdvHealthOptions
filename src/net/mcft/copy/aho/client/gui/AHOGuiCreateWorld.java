@@ -36,7 +36,7 @@ public class AHOGuiCreateWorld extends GuiCreateWorld {
 	}
 	
 	private String getRegenButtonString() {
-		String regenModeString = LocalizationUtils.translate(AHOLocalization.REGEN_MODE + "." + regenMode.toString().toLowerCase());
+		String regenModeString = LocalizationUtils.translate(AdvHealthOptions.config.<String>get(AHOGlobalConfig.generalName));
 		return LocalizationUtils.translate(AHOLocalization.REGEN_MODE, regenModeString);
 	}
 	
